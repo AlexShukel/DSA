@@ -3,4 +3,4 @@ project(DSA)
 
 set(CMAKE_CXX_STANDARD 11)
 
-add_executable(DSA main.cpp)
+add_executable(DSA main.cpp ./sqrt/fisr.cpp)
