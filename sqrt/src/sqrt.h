@@ -5,6 +5,9 @@
 #ifndef DSA_SQRT_H
 #define DSA_SQRT_H
 
-double sqrt(double number);
+template<typename T>
+T sqrt(T number);
+
+#include "sqrt.tpp"
 
 #endif //DSA_SQRT_H

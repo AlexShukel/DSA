@@ -5,7 +5,7 @@
 int main() {
     using namespace std;
 
-    cout << sqrt(5);
+    cout << sqrt<double>(5.3);
 
     return 0;
 }
