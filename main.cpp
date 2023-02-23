@@ -1,12 +1,11 @@
 #include <iostream>
 #include <iomanip>
-
-#include "sqrt/fisr.h"
+#include "sqrt.h"
 
 int main() {
     using namespace std;
 
-    cout << fixed << setprecision(15) << fisr(2);
+    cout << sqrt(5);
 
     return 0;
 }
