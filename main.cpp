@@ -1,11 +1,6 @@
 #include <iostream>
-#include <iomanip>
-#include "sqrt.h"
 
 int main() {
-    using namespace std;
-
-    cout << sqrt<double>(5.3);
-
+    std::cout << "Hello world!";
     return 0;
 }

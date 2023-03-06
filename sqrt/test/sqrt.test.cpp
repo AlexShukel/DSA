@@ -5,7 +5,6 @@
 #include <gtest/gtest.h>
 #include "sqrt.h"
 
-// Demonstrate some basic assertions.
 TEST(SquareRoot, HandlesZero) {
-    EXPECT_EQ(0, sqrt(0));
+    EXPECT_EQ(0, mySqrt(0));
 }

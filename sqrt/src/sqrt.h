@@ -5,9 +5,9 @@
 #ifndef DSA_SQRT_H
 #define DSA_SQRT_H
 
-template<typename T>
-T sqrt(T number);
-
-#include "sqrt.tpp"
+template<class T>
+T mySqrt(T number) {
+    return number;
+}
 
 #endif //DSA_SQRT_H
