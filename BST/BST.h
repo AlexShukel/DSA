@@ -24,8 +24,9 @@ struct Node {
     T value;
     Node *left;
     Node *right;
+    Node *parent;
 
-    explicit Node(T value);
+    Node(T value, Node *parent);
 
     [[nodiscard]] bool isLeaf() const;
 };
@@ -33,13 +34,15 @@ struct Node {
 template<class T>
 class BST_iterator {
 private:
-    std::stack<T> values;
+    std::stack<Node<T> *> values;
 public:
     BST_iterator(Node<T> *root, TraverseOrder order);
 
     BST_iterator &operator++();
 
-    T &operator*();
+    Node<T> *getNode() const;
+
+    T getValue() const;
 
     [[nodiscard]] bool hasNext() const;
 };
@@ -48,10 +51,17 @@ template<class T>
 class BST {
 private:
     Node<T> *root;
+
+    Node<T> *findNode(int value) const;
+
+    Node<T> *findInorderSuccessor(Node<T> *node) const;
+
+    void deleteNodeRecursively(Node<T> *node);
+
 public:
     explicit BST();
 
-    explicit BST(std::vector<T>);
+    explicit BST(const std::vector<T> &values);
 
     ~BST();
 
@@ -60,6 +70,8 @@ public:
     void remove(T value);
 
     bool has(T value);
+
+    BST_iterator<T> getIterator(TraverseOrder order) const;
 
     size_t getHeight() const;
 
@@ -71,191 +83,182 @@ public:
  */
 
 template<class T>
-Node<T>::Node(T value): value(value), left(nullptr), right(nullptr) {}
+Node<T>::Node(T value, Node<T> *parent): value(value), left(nullptr), right(nullptr), parent(parent) {}
 
 template<class T>
 bool Node<T>::isLeaf() const {
-    return left == nullptr && right == nullptr;
+    return !left && !right;
 }
 
 template<class T>
 BST<T>::BST(): root(nullptr) {}
 
 template<class T>
-BST<T>::BST(std::vector<T>): root(nullptr) {
-    // TODO: init tree according to the given vector
+BST<T>::BST(const std::vector<T> &values): root(nullptr) {
+    for (auto x: values) {
+        insert(x);
+    }
 }
 
 template<class T>
 BST<T>::~BST() {
-    // TODO: free memory
+    if (root) {
+        BST_iterator<T> it(root, PREORDER);
+
+        while (it.hasNext()) {
+            delete it.getNode();
+            ++it;
+        }
+    }
+}
+
+template<class T>
+BST_iterator<T> BST<T>::getIterator(TraverseOrder order) const {
+    return BST_iterator<T>(root, order);
+}
+
+template<class T>
+Node<T> *BST<T>::findNode(int value) const {
+    Node<T> *node = root;
+
+    while (node) {
+        if (node->value == value) {
+            break;
+        }
+
+        if (value < node->value) {
+            node = node->left;
+        } else {
+            node = node->right;
+        }
+    }
+
+    return node;
+}
+
+template<class T>
+Node<T> *BST<T>::findInorderSuccessor(Node<T> *node) const {
+    while (node && node->left) {
+        node = node->left;
+    }
+
+    return node;
 }
 
 template<class T>
 void BST<T>::insert(T value) {
-    if (root == nullptr) {
-        root = new Node(value);
+    if (!root) {
+        root = new Node(value, (Node<T> *) nullptr);
+        return;
     }
 
     Node<T> *parent = root;
-    Node<T> *current = root;
+    Node<T> *node = root;
 
-    while (current != nullptr) {
-        if (current->value == value) {
-            break;
+    while (node) {
+        if (node->value == value) {
+            return;
         }
 
-        parent = current;
+        parent = node;
 
-        if (current->value > value) {
-            current = current->left;
-        }
-
-        if (current->value < value) {
-            current = current->right;
-        }
-    }
-
-    if (current == nullptr) {
-        if (value > parent->value) {
-            parent->right = new Node(value);
+        if (value < node->value) {
+            node = node->left;
         } else {
-            parent->left = new Node(value);
+            node = node->right;
         }
     }
+
+    if (value < parent->value) {
+        parent->left = new Node(value, parent);
+    } else {
+        parent->right = new Node(value, parent);
+    }
+}
+
+template<class T>
+void BST<T>::deleteNodeRecursively(Node<T> *node) {
+    T value = node->value;
+
+    // Node is leaf
+    if (node->isLeaf()) {
+        if (node->parent) {
+            if (value < node->parent->value) {
+                node->parent->left = nullptr;
+            } else {
+                node->parent->right = nullptr;
+            }
+        }
+
+        delete node;
+        return;
+    }
+
+    // Has one left child
+    if (!node->right) {
+        if (node->parent) {
+            if (value < node->parent->value) {
+                node->parent->left = node->left;
+            } else {
+                node->parent->right = node->left;
+            }
+        } else {
+            root = node->left;
+        }
+
+        delete node;
+        return;
+    }
+
+    // Has one right child
+    if (!node->left) {
+        if (node->parent) {
+            if (value < node->parent->value) {
+                node->parent->left = node->right;
+            } else {
+                node->parent->right = node->right;
+            }
+        } else {
+            root = node->right;
+        }
+
+        delete node;
+        return;
+    }
+
+    Node<T> *temp = findInorderSuccessor(node->right);
+    node->value = temp->value;
+    deleteNodeRecursively(temp);
 }
 
 template<class T>
 void BST<T>::remove(T value) {
+    Node<T> *node = findNode(value);
 
+    if (!node) {
+        return;
+    }
+
+    deleteNodeRecursively(node);
 }
 
 template<class T>
 bool BST<T>::has(T value) {
-    return true;
+    return static_cast<bool>(findNode(value));
 }
 
 template<class T>
 size_t BST<T>::size() const {
+    // TODO
     return 0;
 }
 
 template<class T>
 size_t BST<T>::getHeight() const {
+    // TODO
     return 0;
 }
 
-template<class T>
-BST_iterator<T>::BST_iterator(Node<T> *root, TraverseOrder order) {
-    switch (order) {
-        case INORDER: {
-            std::stack<std::pair<int, Node<T> *>> tempStack;
-            tempStack.push({0, root});
-
-            while (!tempStack.empty()) {
-                auto &[count, node] = tempStack.top();
-
-                if (node->isLeaf()) {
-                    values.push(node->value);
-                    tempStack.pop();
-                }
-
-                if (count == 2) {
-                    tempStack.pop();
-                }
-
-                if (count == 0 && node->right) {
-                    tempStack.push({0, node->right});
-                }
-
-                if (count == 1 && node->left) {
-                    values.push(node->value);
-                    tempStack.push({0, node->left});
-                }
-
-                ++count;
-            }
-
-            break;
-        }
-
-        case PREORDER: {
-            std::stack<std::pair<int, Node<T> *>> tempStack;
-            tempStack.push({0, root});
-
-            while (!tempStack.empty()) {
-                auto &[count, node] = tempStack.top();
-
-                if (node->isLeaf() || count == 2) {
-                    values.push(node->value);
-                    tempStack.pop();
-                }
-
-                if (count == 0 && node->right) {
-                    tempStack.push({0, node->right});
-                }
-
-                if (count == 1 && node->left) {
-                    tempStack.push({0, node->left});
-                }
-
-                ++count;
-            }
-
-            break;
-        }
-
-        case POSTORDER: {
-            std::stack<std::pair<int, Node<T> *>> tempStack;
-            tempStack.push({0, root});
-
-            while (!tempStack.empty()) {
-                auto &[count, node] = tempStack.top();
-
-                if (node->isLeaf()) {
-                    values.push(node->value);
-                    tempStack.pop();
-                }
-
-                if (count == 2) {
-                    tempStack.pop();
-                }
-
-                if (count == 0 && node->right) {
-                    values.push(node->value);
-                    tempStack.push({0, node->right});
-                }
-
-                if (count == 1 && node->left) {
-                    tempStack.push({0, node->left});
-                }
-
-                ++count;
-            }
-
-            break;
-        }
-
-        default: {
-            throw std::invalid_argument("Invalid traverse order.");
-        }
-    }
-}
-
-template<class T>
-BST_iterator<T> &BST_iterator<T>::operator++() {
-    values.pop();
-    return *this;
-}
-
-template<class T>
-T &BST_iterator<T>::operator*() {
-    return values.top();
-}
-
-template<class T>
-bool BST_iterator<T>::hasNext() const {
-    return !values.empty();
-}
+#include "BST_iterator.h"
 
 #endif //DSA_BST_H
