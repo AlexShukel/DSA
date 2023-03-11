@@ -1,6 +1,8 @@
 cmake_minimum_required(VERSION 3.23)
 project(DSA)
 
+set(CMAKE_CXX_STANDARD 17)
+
 # Add googletest library
 include(FetchContent)
 FetchContent_Declare(
@@ -11,11 +13,10 @@ FetchContent_Declare(
 set(gtest_force_shared_crt ON CACHE BOOL "" FORCE)
 FetchContent_MakeAvailable(googletest)
 
-set(CMAKE_CXX_STANDARD 11)
-
 enable_testing()
 
 add_subdirectory(sqrt)
+add_subdirectory(BST)
 
 add_executable(DSA main.cpp)
 
