@@ -1,5 +1,6 @@
 #include "gtest/gtest.h"
 #include "AVL.h"
+#include <iostream>
 
 class TEST_AVL {
 private:
@@ -75,6 +76,44 @@ public:
             EXPECT_EQ(tree.root->right->right->value, 12);
         }
     }
+
+    static void runRightLeftRotationsTest() {
+        {
+            AVL<int> tree;
+
+            insertImplementationFromVector({5, 3, 10, 12, 7, 6}, tree);
+
+            tree.root = tree.rotateRightLeft(tree.root, tree.root->right);
+
+            EXPECT_EQ(tree.root->parent, nullptr);
+            EXPECT_EQ(tree.root->value, 7);
+            EXPECT_EQ(tree.root->left->value, 5);
+            EXPECT_EQ(tree.root->left->left->value, 3);
+            EXPECT_EQ(tree.root->left->right->value, 6);
+
+            EXPECT_EQ(tree.root->right->value, 10);
+            EXPECT_EQ(tree.root->right->right->value, 12);
+        }
+    }
+
+    static void runLeftRightRotationsTest() {
+        {
+            AVL<int> tree;
+
+            insertImplementationFromVector({10, 12, 5, 6, 7, 4}, tree);
+
+            tree.root = tree.rotateLeftRight(tree.root, tree.root->left);
+
+            EXPECT_EQ(tree.root->parent, nullptr);
+            EXPECT_EQ(tree.root->value, 6);
+            EXPECT_EQ(tree.root->left->value, 5);
+            EXPECT_EQ(tree.root->left->left->value, 4);
+
+            EXPECT_EQ(tree.root->right->value, 10);
+            EXPECT_EQ(tree.root->right->right->value, 12);
+            EXPECT_EQ(tree.root->right->left->value, 7);
+        }
+    }
 };
 
 TEST(AVL, leftRotation) {
@@ -83,4 +122,16 @@ TEST(AVL, leftRotation) {
 
 TEST(AVL, rightRotation) {
     TEST_AVL::runRightRotationsTest();
+}
+
+TEST(AVL, rightLeftRotation) {
+    TEST_AVL::runRightLeftRotationsTest();
+}
+
+TEST(AVL, leftRightRotation) {
+    TEST_AVL::runLeftRightRotationsTest();
+}
+
+TEST(AVL, insertion) {
+
 }

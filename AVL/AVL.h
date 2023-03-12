@@ -102,12 +102,85 @@ Node<T> *AVL<T>::rotateRight(Node<T> *X, Node<T> *Z) {
 
 template<class T>
 Node<T> *AVL<T>::rotateRightLeft(Node<T> *X, Node<T> *Z) {
-    return X;
+    Node<T> *prevParent = X->parent;
+    
+    Node<T> *Y = Z->left;
+
+    Node<T> *t3 = Y->right;
+    Z->left = t3;
+    if (t3) {
+        t3->parent = Z;
+    }
+
+    Node<T> *t2 = Y->left;
+    X->right = t2;
+
+    if (t2) {
+        t2->parent = X;
+    }
+
+    Y->right = Z;
+    Z->parent = Y;
+
+    Y->left = X;
+    X->parent = Y;
+    Y->parent = prevParent;
+
+    if (Y->balanceFactor == 0) {
+        X->balanceFactor = 0;
+        Z->balanceFactor = 0;
+    } else {
+        if (Y->balanceFactor > 0) {
+            X->balanceFactor = -1;
+            Z->balanceFactor = 0;
+        } else {
+            X->balanceFactor = 0;
+            Z->balanceFactor = 1;
+        }
+    }
+    Y->balanceFactor = 0;
+    return Y;
 }
 
 template<class T>
 Node<T> *AVL<T>::rotateLeftRight(Node<T> *X, Node<T> *Z) {
-    return X;
+    Node<T> *prevParent = X->parent;
+
+    Node<T> *Y = Z->right;
+
+    Node<T> *t2 = Y->right;
+    X->left = t2;
+    if (t2) {
+        t2->parent = X;
+    }
+
+    Node<T> *t3 = Y->left;
+    Z->right = t3;
+    if (t3) {
+        t3->parent = Z;
+    }
+
+    Y->right = X;
+    X->parent = Y;
+
+    Y->left = Z;
+    Z->parent = Y;
+    Y->parent = prevParent;
+
+    if (Y->balanceFactor == 0) {
+        X->balanceFactor = 0;
+        Z->balanceFactor = 0;
+    } else {
+        if (Y->balanceFactor > 0) {
+            X->balanceFactor = -1;
+            Z->balanceFactor = 0;
+        } else {
+            X->balanceFactor = 0;
+            Z->balanceFactor = 1;
+        }
+    }
+    Y->balanceFactor = 0;
+    return Y;
 }
 
 #endif //DSA_AVL_H
