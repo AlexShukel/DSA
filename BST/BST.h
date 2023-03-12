@@ -8,66 +8,33 @@
 #include <vector>
 #include <stack>
 #include <stdexcept>
-
-/**
- * Declaration part
- */
-
-enum TraverseOrder {
-    INORDER,
-    PREORDER,
-    POSTORDER
-};
-
-template<class T>
-struct Node {
-    T value;
-    Node *left;
-    Node *right;
-    Node *parent;
-
-    Node(T value, Node *parent);
-
-    [[nodiscard]] bool isLeaf() const;
-};
-
-template<class T>
-class BST_iterator {
-private:
-    std::stack<Node<T> *> values;
-public:
-    BST_iterator(Node<T> *root, TraverseOrder order);
-
-    BST_iterator &operator++();
-
-    Node<T> *getNode() const;
-
-    T getValue() const;
-
-    [[nodiscard]] bool hasNext() const;
-};
+#include "Node.h"
+#include "TraverseOrder.h"
+#include "BST_iterator.h"
 
 template<class T>
 class BST {
-private:
+protected:
     Node<T> *root;
 
     Node<T> *findNode(int value) const;
 
     Node<T> *findInorderSuccessor(Node<T> *node) const;
 
-    void deleteNodeRecursively(Node<T> *node);
+    void removeImplementation(Node<T> *node);
+
+    void insertImplementation(T value);
 
 public:
     explicit BST();
 
-    explicit BST(const std::vector<T> &values);
-
     ~BST();
 
-    void insert(T value);
+    void insertFromVector(const std::vector<T> &values);
 
-    void remove(T value);
+    virtual void insert(T value);
+
+    virtual void remove(T value);
 
     bool has(T value);
 
@@ -78,27 +45,8 @@ public:
     size_t size() const;
 };
 
-/**
- * Implementation part
- */
-
-template<class T>
-Node<T>::Node(T value, Node<T> *parent): value(value), left(nullptr), right(nullptr), parent(parent) {}
-
-template<class T>
-bool Node<T>::isLeaf() const {
-    return !left && !right;
-}
-
 template<class T>
 BST<T>::BST(): root(nullptr) {}
-
-template<class T>
-BST<T>::BST(const std::vector<T> &values): root(nullptr) {
-    for (auto x: values) {
-        insert(x);
-    }
-}
 
 template<class T>
 BST<T>::~BST() {
@@ -110,6 +58,31 @@ BST<T>::~BST() {
             ++it;
         }
     }
+}
+
+// Methods
+
+template<class T>
+void BST<T>::insertFromVector(const std::vector<T> &values) {
+    for (auto x: values) {
+        insert(x);
+    }
+}
+
+template<class T>
+void BST<T>::insert(T value) {
+    insertImplementation(value);
+}
+
+template<class T>
+void BST<T>::remove(T value) {
+    Node<T> *node = findNode(value);
+
+    if (!node) {
+        return;
+    }
+
+    removeImplementation(node);
 }
 
 template<class T>
@@ -146,7 +119,7 @@ Node<T> *BST<T>::findInorderSuccessor(Node<T> *node) const {
 }
 
 template<class T>
-void BST<T>::insert(T value) {
+void BST<T>::insertImplementation(T value) {
     if (!root) {
         root = new Node(value, (Node<T> *) nullptr);
         return;
@@ -163,8 +136,10 @@ void BST<T>::insert(T value) {
         parent = node;
 
         if (value < node->value) {
+            --node->balanceFactor;
             node = node->left;
         } else {
+            ++node->balanceFactor;
             node = node->right;
         }
     }
@@ -177,7 +152,7 @@ void BST<T>::insert(T value) {
 }
 
 template<class T>
-void BST<T>::deleteNodeRecursively(Node<T> *node) {
+void BST<T>::removeImplementation(Node<T> *node) {
     T value = node->value;
 
     // Node is leaf
@@ -228,18 +203,7 @@ void BST<T>::deleteNodeRecursively(Node<T> *node) {
 
     Node<T> *temp = findInorderSuccessor(node->right);
     node->value = temp->value;
-    deleteNodeRecursively(temp);
-}
-
-template<class T>
-void BST<T>::remove(T value) {
-    Node<T> *node = findNode(value);
-
-    if (!node) {
-        return;
-    }
-
-    deleteNodeRecursively(node);
+    removeImplementation(temp);
 }
 
 template<class T>
@@ -258,7 +222,5 @@ size_t BST<T>::getHeight() const {
     // TODO
     return 0;
 }
-
-#include "BST_iterator.h"
 
 #endif //DSA_BST_H

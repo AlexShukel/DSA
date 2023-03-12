@@ -13,7 +13,8 @@ TEST(BST, insertion) {
 }
 
 TEST(BST, leafDeletion) {
-    BST<int> bst({5, 3, 6, 2, 4});
+    BST<int> bst;
+    bst.insertFromVector({5, 3, 6, 2, 4});
 
     EXPECT_EQ(bst.has(6), true);
     bst.remove(6);
@@ -26,7 +27,8 @@ TEST(BST, leafDeletion) {
 
 TEST(BST, singleChildDeletion) {
     {
-        BST<int> bst({5, 3, 6, 2, 4, 0});
+        BST<int> bst;
+        bst.insertFromVector({5, 3, 6, 2, 4, 0});
 
         EXPECT_EQ(bst.has(2), true);
         bst.remove(2);
@@ -36,7 +38,8 @@ TEST(BST, singleChildDeletion) {
 
     // Root has one child
     {
-        BST<int> bst({1, 2, 3, 4});
+        BST<int> bst;
+        bst.insertFromVector({1, 2, 3, 4});
 
         EXPECT_EQ(bst.has(1), true);
         bst.remove(1);
@@ -47,14 +50,16 @@ TEST(BST, singleChildDeletion) {
 
 TEST(BST, deletion) {
     {
-        BST<int> bst({50, 70, 60, 65, 80, 85, 75, 30, 20, 40, 32, 34, 36});
+        BST<int> bst;
+        bst.insertFromVector({50, 70, 60, 65, 80, 85, 75, 30, 20, 40, 32, 34, 36});
 
         bst.remove(70);
         EXPECT_EQ(bst.has(70), false);
     }
 
     {
-        BST<int> bst({50, 70, 60, 65, 80, 85, 75, 30, 20, 40, 32, 34, 36});
+        BST<int> bst;
+        bst.insertFromVector({50, 70, 60, 65, 80, 85, 75, 30, 20, 40, 32, 34, 36});
 
         bst.remove(30);
         EXPECT_EQ(bst.has(30), false);
@@ -62,7 +67,8 @@ TEST(BST, deletion) {
 }
 
 TEST(BST_iterator, inorder) {
-    BST<int> bst({5, 3, 6, 2, 4});
+    BST<int> bst;
+    bst.insertFromVector({5, 3, 6, 2, 4});
     auto it = bst.getIterator(INORDER);
 
     std::vector<int> values;
@@ -75,7 +81,8 @@ TEST(BST_iterator, inorder) {
 }
 
 TEST(BST_iterator, preorder) {
-    BST<int> bst({5, 3, 6, 2, 4});
+    BST<int> bst;
+    bst.insertFromVector({5, 3, 6, 2, 4});
     auto it = bst.getIterator(PREORDER);
 
     std::vector<int> values;
@@ -88,7 +95,8 @@ TEST(BST_iterator, preorder) {
 }
 
 TEST(BST_iterator, postorder) {
-    BST<int> bst({5, 3, 6, 2, 4});
+    BST<int> bst;
+    bst.insertFromVector({5, 3, 6, 2, 4});
     auto it = bst.getIterator(POSTORDER);
 
     std::vector<int> values;
