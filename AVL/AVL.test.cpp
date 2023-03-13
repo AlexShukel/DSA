@@ -6,7 +6,7 @@ class TEST_AVL {
 private:
     static void insertImplementationFromVector(const std::vector<int> &values, AVL<int> &tree) {
         for (auto x: values) {
-            auto node = tree.insertImplementation(x);
+            auto node = tree.insertNode(x);
             tree.updateBalanceFactors(node, false);
         }
     }

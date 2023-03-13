@@ -39,12 +39,14 @@ private:
 
     void updateBalanceFactors(Node<T> *from, bool hasRemoved);
 
+    Node<T> *insertNode(T value);
+
 public:
     explicit AVL() = default;
 
     explicit AVL(const std::vector<T> &values);
 
-    void insert(T value);
+    Node<T> *insert(T value);
 
     void remove(T value);
 };
@@ -57,8 +59,13 @@ AVL<T>::AVL(const std::vector<T> &values) {
 }
 
 template<class T>
-void AVL<T>::insert(T value) {
-    Node<T> *from = this->insertImplementation(value);
+Node<T> *AVL<T>::insertNode(T value) {
+    return BST<T>::insert(value);
+}
+
+template<class T>
+Node<T> *AVL<T>::insert(T value) {
+    Node<T> *from = insertNode(value);
 
     updateBalanceFactors(from, false);
     NodeOverflow<T> nodeOverflow = findOverflowedNode(from);
@@ -67,7 +74,7 @@ void AVL<T>::insert(T value) {
     Node<T> *Z = nodeOverflow.Z;
 
     if (!X) {
-        return;
+        return from;
     }
 
     Node<T> *newRoot = nullptr;
@@ -102,6 +109,8 @@ void AVL<T>::insert(T value) {
     } else {
         this->root = newRoot;
     }
+
+    return from;
 }
 
 template<class T>

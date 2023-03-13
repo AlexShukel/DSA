@@ -23,8 +23,6 @@ protected:
 
     void removeImplementation(Node<T> *node);
 
-    Node<T> *insertImplementation(T value);
-
 public:
     explicit BST();
 
@@ -32,7 +30,7 @@ public:
 
     void insertFromVector(const std::vector<T> &values);
 
-    virtual void insert(T value);
+    virtual Node<T> *insert(T value);
 
     virtual void remove(T value);
 
@@ -70,8 +68,36 @@ void BST<T>::insertFromVector(const std::vector<T> &values) {
 }
 
 template<class T>
-void BST<T>::insert(T value) {
-    insertImplementation(value);
+Node<T> *BST<T>::insert(T value) {
+    if (!root) {
+        root = new Node(value, (Node<T> *) nullptr);
+        return root;
+    }
+
+    Node<T> *parent = root;
+    Node<T> *node = root;
+
+    while (node) {
+        if (node->value == value) {
+            return node;
+        }
+
+        parent = node;
+
+        if (value < node->value) {
+            node = node->left;
+        } else {
+            node = node->right;
+        }
+    }
+
+    if (value < parent->value) {
+        parent->left = new Node(value, parent);
+        return parent->left;
+    } else {
+        parent->right = new Node(value, parent);
+        return parent->right;
+    }
 }
 
 template<class T>
@@ -116,39 +142,6 @@ Node<T> *BST<T>::findInorderSuccessor(Node<T> *node) const {
     }
 
     return node;
-}
-
-template<class T>
-Node<T> *BST<T>::insertImplementation(T value) {
-    if (!root) {
-        root = new Node(value, (Node<T> *) nullptr);
-        return root;
-    }
-
-    Node<T> *parent = root;
-    Node<T> *node = root;
-
-    while (node) {
-        if (node->value == value) {
-            return node;
-        }
-
-        parent = node;
-
-        if (value < node->value) {
-            node = node->left;
-        } else {
-            node = node->right;
-        }
-    }
-
-    if (value < parent->value) {
-        parent->left = new Node(value, parent);
-        return parent->left;
-    } else {
-        parent->right = new Node(value, parent);
-        return parent->right;
-    }
 }
 
 template<class T>
