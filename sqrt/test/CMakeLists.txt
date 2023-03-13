@@ -7,5 +7,3 @@ target_include_directories(sqrtTest PUBLIC ../src)
 
 include(GoogleTest)
 gtest_discover_tests(sqrtTest)
-
-add_test(NAME SQRT COMMAND sqrtTest)

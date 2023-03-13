@@ -1,0 +1,15 @@
+{
+  "name": "sorts",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "generate": "zx generateSort.mjs"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "zx": "^7.2.0"
+  }
+}
