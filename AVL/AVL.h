@@ -221,7 +221,9 @@ Node<T> *AVL<T>::rotateRightLeft(Node<T> *X, Node<T> *Z) {
     X->parent = Y;
     Y->parent = prevParent;
 
-    // TODO: update heights
+    ++Y->height;
+    X->height = std::max(t2 ? t2->height : 0, X->left ? X->left->height : 0) + 1;
+    Z->height = std::max(t3 ? t3->height : 0, Z->right ? Z->right->height : 0) + 1;
 
     return Y;
 }
@@ -251,7 +253,9 @@ Node<T> *AVL<T>::rotateLeftRight(Node<T> *X, Node<T> *Z) {
     Z->parent = Y;
     Y->parent = prevParent;
 
-    // TODO: update heights
+    ++Y->height;
+    X->height = std::max(t2 ? t2->height : 0, X->right ? X->right->height : 0) + 1;
+    Z->height = std::max(t3 ? t3->height : 0, Z->left ? Z->left->height : 0) + 1;
 
     return Y;
 }
