@@ -8,6 +8,21 @@
 #include "../BST/BST.h"
 
 template<class T>
+struct NodeOverflow {
+    Node<T> *X;
+    Node<T> *Z;
+
+    NodeOverflow(Node<T> *X, Node<T> *Z);
+
+    explicit operator std::tuple<T, T>() {
+        return std::make_tuple(X, Z);
+    }
+};
+
+template<class T>
+NodeOverflow<T>::NodeOverflow(Node<T> *X, Node<T> *Z): X(X), Z(Z) {}
+
+template<class T>
 class AVL : public BST<T> {
     friend class TEST_AVL;
 
@@ -19,6 +34,10 @@ private:
     Node<T> *rotateRightLeft(Node<T> *X, Node<T> *Z);
 
     Node<T> *rotateLeftRight(Node<T> *X, Node<T> *Z);
+
+    NodeOverflow<T> findOverflowedNode(Node<T> *from);
+
+    void updateBalanceFactors(Node<T> *from, bool hasRemoved);
 
 public:
     explicit AVL() = default;
@@ -39,7 +58,50 @@ AVL<T>::AVL(const std::vector<T> &values) {
 
 template<class T>
 void AVL<T>::insert(T value) {
-    this->insertImplementation(value);
+    Node<T> *from = this->insertImplementation(value);
+
+    updateBalanceFactors(from, false);
+    NodeOverflow<T> nodeOverflow = findOverflowedNode(from);
+
+    Node<T> *X = nodeOverflow.X;
+    Node<T> *Z = nodeOverflow.Z;
+
+    if (!X) {
+        return;
+    }
+
+    Node<T> *newRoot = nullptr;
+    Node<T> *prevParent = X->parent;
+    bool isLeft;
+    if (X->parent) {
+        isLeft = X->parent->left == X;
+    }
+
+    if (X->right == Z) {
+        if (Z->getBalanceFactor() >= 0) {
+            newRoot = rotateLeft(X, Z);
+        } else {
+            newRoot = rotateRightLeft(X, Z);
+        }
+    }
+
+    if (X->left == Z) {
+        if (Z->getBalanceFactor() <= 0) {
+            newRoot = rotateRight(X, Z);
+        } else {
+            newRoot = rotateLeftRight(X, Z);
+        }
+    }
+
+    if (prevParent) {
+        if (isLeft) {
+            prevParent->left = newRoot;
+        } else {
+            prevParent->right = newRoot;
+        }
+    } else {
+        this->root = newRoot;
+    }
 }
 
 template<class T>
@@ -51,6 +113,40 @@ void AVL<T>::remove(T value) {
     }
 
     this->removeImplementation(node);
+}
+
+template<class T>
+void AVL<T>::updateBalanceFactors(Node<T> *from, bool hasRemoved) {
+    if (from->parent) {
+        if (from->parent->left == from && from->parent->right) {
+            return;
+        }
+
+        if (from->parent->right == from && from->parent->left) {
+            return;
+        }
+    }
+
+    Node<T> *current = from;
+
+    while (current) {
+        if (current->parent) {
+            ++current->parent->height;
+        }
+
+        current = current->parent;
+    }
+}
+
+template<class T>
+NodeOverflow<T> AVL<T>::findOverflowedNode(Node<T> *from) {
+    auto prev = from;
+    while (from && abs(from->getBalanceFactor()) < 2) {
+        prev = from;
+        from = from->parent;
+    }
+
+    return NodeOverflow<T>(from, prev);
 }
 
 // https://en.wikipedia.org/wiki/AVL_tree#Rebalancing
@@ -66,13 +162,8 @@ Node<T> *AVL<T>::rotateLeft(Node<T> *X, Node<T> *Z) {
     Z->parent = X->parent;
     X->parent = Z;
 
-    if (Z->balanceFactor == 0) {
-        ++X->balanceFactor;
-        --Z->balanceFactor;
-    } else {
-        X->balanceFactor = 0;
-        Z->balanceFactor = 0;
-    }
+    X->height -= 2;
+    Z->height = std::max(Z->left->height + 1, Z->right->height + 1);
 
     return Z;
 }
@@ -89,13 +180,8 @@ Node<T> *AVL<T>::rotateRight(Node<T> *X, Node<T> *Z) {
     Z->parent = X->parent;
     X->parent = Z;
 
-    if (Z->balanceFactor == 0) {
-        ++X->balanceFactor;
-        --Z->balanceFactor;
-    } else {
-        X->balanceFactor = 0;
-        Z->balanceFactor = 0;
-    }
+    X->height -= 2;
+    Z->height = std::max(Z->left->height + 1, Z->right->height + 1);
 
     return Z;
 }
@@ -103,7 +189,7 @@ Node<T> *AVL<T>::rotateRight(Node<T> *X, Node<T> *Z) {
 template<class T>
 Node<T> *AVL<T>::rotateRightLeft(Node<T> *X, Node<T> *Z) {
     Node<T> *prevParent = X->parent;
-    
+
     Node<T> *Y = Z->left;
 
     Node<T> *t3 = Y->right;
@@ -126,19 +212,8 @@ Node<T> *AVL<T>::rotateRightLeft(Node<T> *X, Node<T> *Z) {
     X->parent = Y;
     Y->parent = prevParent;
 
-    if (Y->balanceFactor == 0) {
-        X->balanceFactor = 0;
-        Z->balanceFactor = 0;
-    } else {
-        if (Y->balanceFactor > 0) {
-            X->balanceFactor = -1;
-            Z->balanceFactor = 0;
-        } else {
-            X->balanceFactor = 0;
-            Z->balanceFactor = 1;
-        }
-    }
-    Y->balanceFactor = 0;
+    // TODO: update heights
+
     return Y;
 }
 
@@ -167,19 +242,8 @@ Node<T> *AVL<T>::rotateLeftRight(Node<T> *X, Node<T> *Z) {
     Z->parent = Y;
     Y->parent = prevParent;
 
-    if (Y->balanceFactor == 0) {
-        X->balanceFactor = 0;
-        Z->balanceFactor = 0;
-    } else {
-        if (Y->balanceFactor > 0) {
-            X->balanceFactor = -1;
-            Z->balanceFactor = 0;
-        } else {
-            X->balanceFactor = 0;
-            Z->balanceFactor = 1;
-        }
-    }
-    Y->balanceFactor = 0;
+    // TODO: update heights
+
     return Y;
 }
 

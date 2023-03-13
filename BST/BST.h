@@ -23,7 +23,7 @@ protected:
 
     void removeImplementation(Node<T> *node);
 
-    void insertImplementation(T value);
+    Node<T> *insertImplementation(T value);
 
 public:
     explicit BST();
@@ -119,10 +119,10 @@ Node<T> *BST<T>::findInorderSuccessor(Node<T> *node) const {
 }
 
 template<class T>
-void BST<T>::insertImplementation(T value) {
+Node<T> *BST<T>::insertImplementation(T value) {
     if (!root) {
         root = new Node(value, (Node<T> *) nullptr);
-        return;
+        return root;
     }
 
     Node<T> *parent = root;
@@ -130,24 +130,24 @@ void BST<T>::insertImplementation(T value) {
 
     while (node) {
         if (node->value == value) {
-            return;
+            return node;
         }
 
         parent = node;
 
         if (value < node->value) {
-            --node->balanceFactor;
             node = node->left;
         } else {
-            ++node->balanceFactor;
             node = node->right;
         }
     }
 
     if (value < parent->value) {
         parent->left = new Node(value, parent);
+        return parent->left;
     } else {
         parent->right = new Node(value, parent);
+        return parent->right;
     }
 }
 
