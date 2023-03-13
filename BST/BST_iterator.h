@@ -5,7 +5,24 @@
 #ifndef DSA_BST_ITERATOR_H
 #define DSA_BST_ITERATOR_H
 
-#include "BST.h"
+#include "Node.h"
+#include "TraverseOrder.h"
+
+template<class T>
+class BST_iterator {
+private:
+    std::stack<Node<T> *> values;
+public:
+    BST_iterator(Node<T> *root, TraverseOrder order);
+
+    BST_iterator &operator++();
+
+    Node<T> *getNode() const;
+
+    T getValue() const;
+
+    [[nodiscard]] bool hasNext() const;
+};
 
 template<class T>
 BST_iterator<T>::BST_iterator(Node<T> *root, TraverseOrder order) {
