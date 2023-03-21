@@ -2,8 +2,8 @@
 // Created by alexs on 2023-03-11.
 //
 
-#ifndef DSA_BST_ITERATOR_HPP
-#define DSA_BST_ITERATOR_HPP
+#ifndef DSA_BSTITERATOR_HPP
+#define DSA_BSTITERATOR_HPP
 
 #include "Node.hpp"
 
@@ -14,13 +14,13 @@ enum TraverseOrder {
 };
 
 template<class T>
-class BST_iterator {
+class BstIterator {
 private:
     std::stack<Node<T> *> values;
 public:
-    BST_iterator(Node<T> *root, TraverseOrder order);
+    BstIterator(Node<T> *root, TraverseOrder order);
 
-    BST_iterator &operator++();
+    BstIterator &operator++();
 
     Node<T> *getNode() const;
 
@@ -30,7 +30,7 @@ public:
 };
 
 template<class T>
-BST_iterator<T>::BST_iterator(Node<T> *root, TraverseOrder order) {
+BstIterator<T>::BstIterator(Node<T> *root, TraverseOrder order) {
     switch (order) {
         // LVD (left, vertex, right)
         case INORDER: {
@@ -139,24 +139,24 @@ BST_iterator<T>::BST_iterator(Node<T> *root, TraverseOrder order) {
 }
 
 template<class T>
-BST_iterator<T> &BST_iterator<T>::operator++() {
+BstIterator<T> &BstIterator<T>::operator++() {
     values.pop();
     return *this;
 }
 
 template<class T>
-Node<T> *BST_iterator<T>::getNode() const {
+Node<T> *BstIterator<T>::getNode() const {
     return values.top();
 }
 
 template<class T>
-T BST_iterator<T>::getValue() const {
+T BstIterator<T>::getValue() const {
     return values.top()->value;
 }
 
 template<class T>
-bool BST_iterator<T>::hasNext() const {
+bool BstIterator<T>::hasNext() const {
     return !values.empty();
 }
 
-#endif //DSA_BST_ITERATOR_HPP
+#endif //DSA_BSTITERATOR_HPP

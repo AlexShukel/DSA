@@ -2,10 +2,10 @@
 // Created by alexs on 2023-03-11.
 //
 
-#ifndef DSA_AVL_H
-#define DSA_AVL_H
+#ifndef DSA_AVL_HPP
+#define DSA_AVL_HPP
 
-#include "../BST/BST.hpp"
+#include "../BST/Bst.hpp"
 
 template<class T>
 struct NodeOverflow {
@@ -19,10 +19,11 @@ template<class T>
 NodeOverflow<T>::NodeOverflow(Node<T> *X, Node<T> *Z): X(X), Z(Z) {}
 
 template<class T>
-class AVL : public BST<T> {
-    friend class TEST_AVL;
+class Avl : public Bst<T> {
+    friend class TestAvl;
 
 private:
+    // See https://en.wikipedia.org/wiki/AVL_tree#Rebalancing
     Node<T> *rotateLeft(Node<T> *X, Node<T> *Z);
 
     Node<T> *rotateRight(Node<T> *X, Node<T> *Z);
@@ -38,9 +39,9 @@ private:
     Node<T> *insertNode(T value);
 
 public:
-    explicit AVL() = default;
+    explicit Avl() = default;
 
-    explicit AVL(const std::vector<T> &values);
+    explicit Avl(const std::vector<T> &values);
 
     Node<T> *insert(T value);
 
@@ -48,19 +49,19 @@ public:
 };
 
 template<class T>
-AVL<T>::AVL(const std::vector<T> &values) {
+Avl<T>::Avl(const std::vector<T> &values) {
     for (auto x: values) {
         insert(x);
     }
 }
 
 template<class T>
-Node<T> *AVL<T>::insertNode(T value) {
-    return BST<T>::insert(value);
+Node<T> *Avl<T>::insertNode(T value) {
+    return Bst<T>::insert(value);
 }
 
 template<class T>
-Node<T> *AVL<T>::insert(T value) {
+Node<T> *Avl<T>::insert(T value) {
     Node<T> *from = insertNode(value);
 
     updateBalanceFactors(from, false);
@@ -110,7 +111,7 @@ Node<T> *AVL<T>::insert(T value) {
 }
 
 template<class T>
-void AVL<T>::remove(T value) {
+void Avl<T>::remove(T value) {
     Node<T> *node = this->findNode(value);
 
     if (!node) {
@@ -121,7 +122,7 @@ void AVL<T>::remove(T value) {
 }
 
 template<class T>
-void AVL<T>::updateBalanceFactors(Node<T> *from, bool hasRemoved) {
+void Avl<T>::updateBalanceFactors(Node<T> *from, bool hasRemoved) {
     if (from->parent) {
         if (from->parent->left == from && from->parent->right) {
             return;
@@ -144,7 +145,7 @@ void AVL<T>::updateBalanceFactors(Node<T> *from, bool hasRemoved) {
 }
 
 template<class T>
-NodeOverflow<T> AVL<T>::findOverflowedNode(Node<T> *from) {
+NodeOverflow<T> Avl<T>::findOverflowedNode(Node<T> *from) {
     auto prev = from;
     while (from && abs(from->getBalanceFactor()) < 2) {
         prev = from;
@@ -154,9 +155,8 @@ NodeOverflow<T> AVL<T>::findOverflowedNode(Node<T> *from) {
     return NodeOverflow<T>(from, prev);
 }
 
-// https://en.wikipedia.org/wiki/AVL_tree#Rebalancing
 template<class T>
-Node<T> *AVL<T>::rotateLeft(Node<T> *X, Node<T> *Z) {
+Node<T> *Avl<T>::rotateLeft(Node<T> *X, Node<T> *Z) {
     Node<T> *t23 = Z->left;
     X->right = t23;
     if (t23) {
@@ -174,7 +174,7 @@ Node<T> *AVL<T>::rotateLeft(Node<T> *X, Node<T> *Z) {
 }
 
 template<class T>
-Node<T> *AVL<T>::rotateRight(Node<T> *X, Node<T> *Z) {
+Node<T> *Avl<T>::rotateRight(Node<T> *X, Node<T> *Z) {
     Node<T> *t23 = Z->right;
     X->left = t23;
     if (t23) {
@@ -192,7 +192,7 @@ Node<T> *AVL<T>::rotateRight(Node<T> *X, Node<T> *Z) {
 }
 
 template<class T>
-Node<T> *AVL<T>::rotateRightLeft(Node<T> *X, Node<T> *Z) {
+Node<T> *Avl<T>::rotateRightLeft(Node<T> *X, Node<T> *Z) {
     Node<T> *prevParent = X->parent;
 
     Node<T> *Y = Z->left;
@@ -225,7 +225,7 @@ Node<T> *AVL<T>::rotateRightLeft(Node<T> *X, Node<T> *Z) {
 }
 
 template<class T>
-Node<T> *AVL<T>::rotateLeftRight(Node<T> *X, Node<T> *Z) {
+Node<T> *Avl<T>::rotateLeftRight(Node<T> *X, Node<T> *Z) {
     Node<T> *prevParent = X->parent;
 
     Node<T> *Y = Z->right;
@@ -256,4 +256,4 @@ Node<T> *AVL<T>::rotateLeftRight(Node<T> *X, Node<T> *Z) {
     return Y;
 }
 
-#endif //DSA_AVL_H
+#endif //DSA_AVL_HPP

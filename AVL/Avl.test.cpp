@@ -1,10 +1,9 @@
 #include "gtest/gtest.h"
-#include "AVL.h"
-#include <iostream>
+#include "Avl.hpp"
 
-class TEST_AVL {
+class TestAvl {
 private:
-    static void insertImplementationFromVector(const std::vector<int> &values, AVL<int> &tree) {
+    static void insertImplementationFromVector(const std::vector<int> &values, Avl<int> &tree) {
         for (auto x: values) {
             auto node = tree.insertNode(x);
             tree.updateBalanceFactors(node, false);
@@ -12,12 +11,12 @@ private:
     }
 
 public:
-    explicit TEST_AVL() = default;
+    explicit TestAvl() = default;
 
     static void runLeftRotationsTest() {
         // When t1 and t23 are NULL
         {
-            AVL<int> tree;
+            Avl<int> tree;
 
             insertImplementationFromVector({5, 6, 7}, tree);
 
@@ -34,7 +33,7 @@ public:
         }
 
         {
-            AVL<int> tree;
+            Avl<int> tree;
 
             insertImplementationFromVector({5, 3, 8, 10, 7, 12}, tree);
 
@@ -60,7 +59,7 @@ public:
     static void runRightRotationsTest() {
         // When t1 and t23 are NULL
         {
-            AVL<int> tree;
+            Avl<int> tree;
 
             insertImplementationFromVector({5, 4, 3}, tree);
 
@@ -77,7 +76,7 @@ public:
         }
 
         {
-            AVL<int> tree;
+            Avl<int> tree;
 
             insertImplementationFromVector({10, 12, 5, 6, 4, 3}, tree);
 
@@ -101,7 +100,7 @@ public:
     }
 
     static void runRightLeftRotationsTest() {
-        AVL<int> tree;
+        Avl<int> tree;
 
         insertImplementationFromVector({5, 3, 10, 12, 7, 6}, tree);
 
@@ -126,7 +125,7 @@ public:
     }
 
     static void runLeftRightRotationsTest() {
-        AVL<int> tree;
+        Avl<int> tree;
 
         insertImplementationFromVector({10, 12, 5, 6, 7, 4}, tree);
 
@@ -152,7 +151,7 @@ public:
 
     static void runFindOverflowedNodeTest() {
         {
-            AVL<int> avl;
+            Avl<int> avl;
             insertImplementationFromVector({1, 2, 3}, avl);
             auto t = avl.findOverflowedNode(avl.root->right->right);
             EXPECT_EQ(t.X, avl.root);
@@ -160,7 +159,7 @@ public:
         }
 
         {
-            AVL<int> avl;
+            Avl<int> avl;
             insertImplementationFromVector({2, 1, 3}, avl);
             auto t = avl.findOverflowedNode(avl.root->right);
             EXPECT_EQ(t.X, nullptr);
@@ -170,7 +169,7 @@ public:
     static void runInsertTest() {
         // left rotation
         {
-            AVL<int> avl;
+            Avl<int> avl;
 
             avl.insertFromVector({1, 2, 3});
 
@@ -182,7 +181,7 @@ public:
 
         // right rotation
         {
-            AVL<int> avl;
+            Avl<int> avl;
 
             avl.insertFromVector({3, 2, 1});
 
@@ -194,7 +193,7 @@ public:
 
         // right-left rotation
         {
-            AVL<int> avl;
+            Avl<int> avl;
 
             avl.insertFromVector({5, 3, 10, 12, 7, 6});
 
@@ -210,7 +209,7 @@ public:
 
         // left-right rotation
         {
-            AVL<int> avl;
+            Avl<int> avl;
 
             avl.insertFromVector({10, 12, 5, 6, 7, 4});
 
@@ -227,25 +226,25 @@ public:
 };
 
 TEST(AVL, leftRotation) {
-    TEST_AVL::runLeftRotationsTest();
+    TestAvl::runLeftRotationsTest();
 }
 
 TEST(AVL, rightRotation) {
-    TEST_AVL::runRightRotationsTest();
+    TestAvl::runRightRotationsTest();
 }
 
 TEST(AVL, rightLeftRotation) {
-    TEST_AVL::runRightLeftRotationsTest();
+    TestAvl::runRightLeftRotationsTest();
 }
 
 TEST(AVL, leftRightRotation) {
-    TEST_AVL::runLeftRightRotationsTest();
+    TestAvl::runLeftRightRotationsTest();
 }
 
 TEST(AVL, findOverflowedNode) {
-    TEST_AVL::runFindOverflowedNodeTest();
+    TestAvl::runFindOverflowedNodeTest();
 }
 
 TEST(AVL, insert) {
-    TEST_AVL::runInsertTest();
+    TestAvl::runInsertTest();
 }

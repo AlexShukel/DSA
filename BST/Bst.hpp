@@ -9,10 +9,10 @@
 #include <stack>
 #include <stdexcept>
 #include "Node.hpp"
-#include "BST_iterator.hpp"
+#include "BstIterator.hpp"
 
 template<class T>
-class BST {
+class Bst {
 protected:
     Node<T> *root;
     size_t height;
@@ -25,9 +25,9 @@ protected:
     void removeImplementation(Node<T> *node);
 
 public:
-    explicit BST();
+    explicit Bst();
 
-    ~BST();
+    ~Bst();
 
     void insertFromVector(const std::vector<T> &values);
 
@@ -37,7 +37,7 @@ public:
 
     bool has(T value);
 
-    BST_iterator<T> getIterator(TraverseOrder order) const;
+    BstIterator<T> getIterator(TraverseOrder order) const;
 
     size_t getHeight() const;
 
@@ -45,12 +45,12 @@ public:
 };
 
 template<class T>
-BST<T>::BST(): root(nullptr), height(0), _size(0) {}
+Bst<T>::Bst(): root(nullptr), height(0), _size(0) {}
 
 template<class T>
-BST<T>::~BST() {
+Bst<T>::~Bst() {
     if (root) {
-        BST_iterator<T> it(root, PREORDER);
+        BstIterator<T> it(root, PREORDER);
 
         while (it.hasNext()) {
             delete it.getNode();
@@ -62,14 +62,14 @@ BST<T>::~BST() {
 // Methods
 
 template<class T>
-void BST<T>::insertFromVector(const std::vector<T> &values) {
+void Bst<T>::insertFromVector(const std::vector<T> &values) {
     for (auto x: values) {
         insert(x);
     }
 }
 
 template<class T>
-Node<T> *BST<T>::insert(T value) {
+Node<T> *Bst<T>::insert(T value) {
     if (!root) {
         root = new Node<T>(value, (Node<T> *) nullptr);
         height = 1;
@@ -109,7 +109,7 @@ Node<T> *BST<T>::insert(T value) {
 }
 
 template<class T>
-void BST<T>::remove(T value) {
+void Bst<T>::remove(T value) {
     Node<T> *node = findNode(value);
 
     if (!node) {
@@ -120,12 +120,12 @@ void BST<T>::remove(T value) {
 }
 
 template<class T>
-BST_iterator<T> BST<T>::getIterator(TraverseOrder order) const {
-    return BST_iterator<T>(root, order);
+BstIterator<T> Bst<T>::getIterator(TraverseOrder order) const {
+    return BstIterator<T>(root, order);
 }
 
 template<class T>
-Node<T> *BST<T>::findNode(int value) const {
+Node<T> *Bst<T>::findNode(int value) const {
     Node<T> *node = root;
 
     while (node) {
@@ -144,7 +144,7 @@ Node<T> *BST<T>::findNode(int value) const {
 }
 
 template<class T>
-Node<T> *BST<T>::findInorderSuccessor(Node<T> *node) const {
+Node<T> *Bst<T>::findInorderSuccessor(Node<T> *node) const {
     while (node && node->left) {
         node = node->left;
     }
@@ -153,7 +153,7 @@ Node<T> *BST<T>::findInorderSuccessor(Node<T> *node) const {
 }
 
 template<class T>
-void BST<T>::removeImplementation(Node<T> *node) {
+void Bst<T>::removeImplementation(Node<T> *node) {
     T value = node->value;
 
     // Node is leaf
@@ -208,17 +208,17 @@ void BST<T>::removeImplementation(Node<T> *node) {
 }
 
 template<class T>
-bool BST<T>::has(T value) {
+bool Bst<T>::has(T value) {
     return static_cast<bool>(findNode(value));
 }
 
 template<class T>
-size_t BST<T>::size() const {
+size_t Bst<T>::size() const {
     return _size;
 }
 
 template<class T>
-size_t BST<T>::getHeight() const {
+size_t Bst<T>::getHeight() const {
     return height;
 }
 
