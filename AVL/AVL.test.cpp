@@ -154,16 +154,16 @@ public:
         {
             AVL<int> avl;
             insertImplementationFromVector({1, 2, 3}, avl);
-            auto [X, Z] = avl.findOverflowedNode(avl.root->right->right);
-            EXPECT_EQ(X, avl.root);
-            EXPECT_EQ(Z, avl.root->right);
+            auto t = avl.findOverflowedNode(avl.root->right->right);
+            EXPECT_EQ(t.X, avl.root);
+            EXPECT_EQ(t.Z, avl.root->right);
         }
 
         {
             AVL<int> avl;
             insertImplementationFromVector({2, 1, 3}, avl);
-            auto [X, Z] = avl.findOverflowedNode(avl.root->right);
-            EXPECT_EQ(X, nullptr);
+            auto t = avl.findOverflowedNode(avl.root->right);
+            EXPECT_EQ(t.X, nullptr);
         }
     }
 

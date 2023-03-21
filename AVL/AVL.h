@@ -5,7 +5,7 @@
 #ifndef DSA_AVL_H
 #define DSA_AVL_H
 
-#include "../BST/BST.h"
+#include "../BST/BST.hpp"
 
 template<class T>
 struct NodeOverflow {
@@ -13,10 +13,6 @@ struct NodeOverflow {
     Node<T> *Z;
 
     NodeOverflow(Node<T> *X, Node<T> *Z);
-
-    explicit operator std::tuple<T, T>() {
-        return std::make_tuple(X, Z);
-    }
 };
 
 template<class T>

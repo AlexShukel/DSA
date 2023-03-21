@@ -2,20 +2,21 @@
 // Created by alexs on 2023-03-06.
 //
 
-#ifndef DSA_BST_H
-#define DSA_BST_H
+#ifndef DSA_BST_HPP
+#define DSA_BST_HPP
 
 #include <vector>
 #include <stack>
 #include <stdexcept>
-#include "Node.h"
-#include "TraverseOrder.h"
-#include "BST_iterator.h"
+#include "Node.hpp"
+#include "BST_iterator.hpp"
 
 template<class T>
 class BST {
 protected:
     Node<T> *root;
+    size_t height;
+    size_t _size;
 
     Node<T> *findNode(int value) const;
 
@@ -44,7 +45,7 @@ public:
 };
 
 template<class T>
-BST<T>::BST(): root(nullptr) {}
+BST<T>::BST(): root(nullptr), height(0), _size(0) {}
 
 template<class T>
 BST<T>::~BST() {
@@ -70,7 +71,9 @@ void BST<T>::insertFromVector(const std::vector<T> &values) {
 template<class T>
 Node<T> *BST<T>::insert(T value) {
     if (!root) {
-        root = new Node(value, (Node<T> *) nullptr);
+        root = new Node<T>(value, (Node<T> *) nullptr);
+        height = 1;
+        ++_size;
         return root;
     }
 
@@ -91,11 +94,16 @@ Node<T> *BST<T>::insert(T value) {
         }
     }
 
+    ++_size;
+    if (parent->isLeaf()) {
+        ++height;
+    }
+
     if (value < parent->value) {
-        parent->left = new Node(value, parent);
+        parent->left = new Node<T>(value, parent);
         return parent->left;
     } else {
-        parent->right = new Node(value, parent);
+        parent->right = new Node<T>(value, parent);
         return parent->right;
     }
 }
@@ -206,14 +214,12 @@ bool BST<T>::has(T value) {
 
 template<class T>
 size_t BST<T>::size() const {
-    // TODO
-    return 0;
+    return _size;
 }
 
 template<class T>
 size_t BST<T>::getHeight() const {
-    // TODO
-    return 0;
+    return height;
 }
 
-#endif //DSA_BST_H
+#endif //DSA_BST_HPP

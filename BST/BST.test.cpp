@@ -1,7 +1,7 @@
 #include <vector>
 
 #include "gtest/gtest.h"
-#include "BST.h"
+#include "BST.hpp"
 #include "testUtils.h"
 
 TEST(BST, insertion) {
@@ -106,4 +106,30 @@ TEST(BST_iterator, postorder) {
     }
 
     expectVectorsEquality(values, {2, 4, 3, 6, 5});
+}
+
+TEST(BST, getHeight) {
+    BST<int> bst;
+    EXPECT_EQ(bst.getHeight(), 0);
+    bst.insert(5);
+    EXPECT_EQ(bst.getHeight(), 1);
+    bst.insert(3);
+    bst.insert(7);
+    EXPECT_EQ(bst.getHeight(), 2);
+    bst.insert(7);
+    EXPECT_EQ(bst.getHeight(), 2);
+}
+
+TEST(BST, getSize) {
+    BST<int> bst;
+    EXPECT_EQ(bst.size(), 0);
+    bst.insert(5);
+    EXPECT_EQ(bst.size(), 1);
+    bst.insert(5);
+    EXPECT_EQ(bst.size(), 1);
+
+    bst.insert(4);
+    bst.insert(5);
+    bst.insert(13);
+    EXPECT_EQ(bst.size(), 3);
 }

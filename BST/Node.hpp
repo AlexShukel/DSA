@@ -2,8 +2,8 @@
 // Created by alexs on 2023-03-12.
 //
 
-#ifndef DSA_NODE_H
-#define DSA_NODE_H
+#ifndef DSA_NODE_HPP
+#define DSA_NODE_HPP
 
 template<class T>
 struct Node {
@@ -36,4 +36,4 @@ int Node<T>::getBalanceFactor() const {
     return rightHeight - leftHeight;
 }
 
-#endif //DSA_NODE_H
+#endif //DSA_NODE_HPP
