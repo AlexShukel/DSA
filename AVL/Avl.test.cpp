@@ -1,23 +1,22 @@
 #include "gtest/gtest.h"
-#include "AVL.h"
-#include <iostream>
+#include "Avl.hpp"
 
-class TEST_AVL {
+class TestAvl {
 private:
-    static void insertImplementationFromVector(const std::vector<int> &values, AVL<int> &tree) {
+    static void insertImplementationFromVector(const std::vector<int> &values, Avl<int> &tree) {
         for (auto x: values) {
-            auto node = tree.insertImplementation(x);
+            auto node = tree.insertNode(x);
             tree.updateBalanceFactors(node, false);
         }
     }
 
 public:
-    explicit TEST_AVL() = default;
+    explicit TestAvl() = default;
 
     static void runLeftRotationsTest() {
         // When t1 and t23 are NULL
         {
-            AVL<int> tree;
+            Avl<int> tree;
 
             insertImplementationFromVector({5, 6, 7}, tree);
 
@@ -34,7 +33,7 @@ public:
         }
 
         {
-            AVL<int> tree;
+            Avl<int> tree;
 
             insertImplementationFromVector({5, 3, 8, 10, 7, 12}, tree);
 
@@ -60,7 +59,7 @@ public:
     static void runRightRotationsTest() {
         // When t1 and t23 are NULL
         {
-            AVL<int> tree;
+            Avl<int> tree;
 
             insertImplementationFromVector({5, 4, 3}, tree);
 
@@ -77,7 +76,7 @@ public:
         }
 
         {
-            AVL<int> tree;
+            Avl<int> tree;
 
             insertImplementationFromVector({10, 12, 5, 6, 4, 3}, tree);
 
@@ -101,7 +100,7 @@ public:
     }
 
     static void runRightLeftRotationsTest() {
-        AVL<int> tree;
+        Avl<int> tree;
 
         insertImplementationFromVector({5, 3, 10, 12, 7, 6}, tree);
 
@@ -126,7 +125,7 @@ public:
     }
 
     static void runLeftRightRotationsTest() {
-        AVL<int> tree;
+        Avl<int> tree;
 
         insertImplementationFromVector({10, 12, 5, 6, 7, 4}, tree);
 
@@ -152,25 +151,25 @@ public:
 
     static void runFindOverflowedNodeTest() {
         {
-            AVL<int> avl;
+            Avl<int> avl;
             insertImplementationFromVector({1, 2, 3}, avl);
-            auto [X, Z] = avl.findOverflowedNode(avl.root->right->right);
-            EXPECT_EQ(X, avl.root);
-            EXPECT_EQ(Z, avl.root->right);
+            auto t = avl.findOverflowedNode(avl.root->right->right);
+            EXPECT_EQ(t.X, avl.root);
+            EXPECT_EQ(t.Z, avl.root->right);
         }
 
         {
-            AVL<int> avl;
+            Avl<int> avl;
             insertImplementationFromVector({2, 1, 3}, avl);
-            auto [X, Z] = avl.findOverflowedNode(avl.root->right);
-            EXPECT_EQ(X, nullptr);
+            auto t = avl.findOverflowedNode(avl.root->right);
+            EXPECT_EQ(t.X, nullptr);
         }
     }
 
     static void runInsertTest() {
         // left rotation
         {
-            AVL<int> avl;
+            Avl<int> avl;
 
             avl.insertFromVector({1, 2, 3});
 
@@ -182,7 +181,7 @@ public:
 
         // right rotation
         {
-            AVL<int> avl;
+            Avl<int> avl;
 
             avl.insertFromVector({3, 2, 1});
 
@@ -194,7 +193,7 @@ public:
 
         // right-left rotation
         {
-            AVL<int> avl;
+            Avl<int> avl;
 
             avl.insertFromVector({5, 3, 10, 12, 7, 6});
 
@@ -210,7 +209,7 @@ public:
 
         // left-right rotation
         {
-            AVL<int> avl;
+            Avl<int> avl;
 
             avl.insertFromVector({10, 12, 5, 6, 7, 4});
 
@@ -224,28 +223,74 @@ public:
             EXPECT_EQ(avl.root->right->left->value, 7);
         }
     }
+
+    static void runDeletionTest() {
+        {
+            Avl<int> avl;
+            avl.remove(5);
+            avl.insert(5);
+            EXPECT_EQ(avl.has(5), true);
+            avl.remove(5);
+            EXPECT_EQ(avl.has(5), false);
+            EXPECT_EQ(avl.root, nullptr);
+        }
+
+        {
+            Avl<int> avl;
+            avl.insertFromVector({5, 7, 4, 3});
+            avl.remove(7);
+
+            EXPECT_EQ(avl.root->value, 4);
+            EXPECT_EQ(avl.root->left->value, 3);
+            EXPECT_EQ(avl.root->right->value, 5);
+            EXPECT_EQ(avl.root->right->isLeaf(), true);
+            EXPECT_EQ(avl.root->left->isLeaf(), true);
+            EXPECT_EQ(avl.root->parent, nullptr);
+        }
+
+        {
+            Avl<int> avl;
+            avl.insertFromVector({8, 10, 4, 12, 6, 2, 1});
+            avl.remove(10);
+
+            EXPECT_EQ(avl.root->value, 4);
+            EXPECT_EQ(avl.root->left->value, 2);
+            EXPECT_EQ(avl.root->left->left->value, 1);
+            EXPECT_EQ(avl.root->left->left->isLeaf(), true);
+            EXPECT_EQ(avl.root->right->value, 8);
+            EXPECT_EQ(avl.root->right->left->value, 6);
+            EXPECT_EQ(avl.root->right->right->value, 12);
+            EXPECT_EQ(avl.root->right->right->isLeaf(), true);
+            EXPECT_EQ(avl.root->right->left->isLeaf(), true);
+            EXPECT_EQ(avl.root->parent, nullptr);
+        }
+    }
 };
 
 TEST(AVL, leftRotation) {
-    TEST_AVL::runLeftRotationsTest();
+    TestAvl::runLeftRotationsTest();
 }
 
 TEST(AVL, rightRotation) {
-    TEST_AVL::runRightRotationsTest();
+    TestAvl::runRightRotationsTest();
 }
 
 TEST(AVL, rightLeftRotation) {
-    TEST_AVL::runRightLeftRotationsTest();
+    TestAvl::runRightLeftRotationsTest();
 }
 
 TEST(AVL, leftRightRotation) {
-    TEST_AVL::runLeftRightRotationsTest();
+    TestAvl::runLeftRightRotationsTest();
 }
 
 TEST(AVL, findOverflowedNode) {
-    TEST_AVL::runFindOverflowedNodeTest();
+    TestAvl::runFindOverflowedNodeTest();
 }
 
 TEST(AVL, insert) {
-    TEST_AVL::runInsertTest();
+    TestAvl::runInsertTest();
+}
+
+TEST(AVL, deletion) {
+    TestAvl::runDeletionTest();
 }

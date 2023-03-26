@@ -1,19 +1,19 @@
 #include <vector>
 
 #include "gtest/gtest.h"
-#include "BST.h"
+#include "Bst.hpp"
 #include "testUtils.h"
 
-TEST(BST, insertion) {
-    BST<int> bst;
+TEST(Bst, insertion) {
+    Bst<int> bst;
 
     EXPECT_EQ(bst.has(5), false);
     bst.insert(5);
     EXPECT_EQ(bst.has(5), true);
 }
 
-TEST(BST, leafDeletion) {
-    BST<int> bst;
+TEST(Bst, leafDeletion) {
+    Bst<int> bst;
     bst.insertFromVector({5, 3, 6, 2, 4});
 
     EXPECT_EQ(bst.has(6), true);
@@ -25,9 +25,9 @@ TEST(BST, leafDeletion) {
     EXPECT_EQ(bst.has(2), false);
 }
 
-TEST(BST, singleChildDeletion) {
+TEST(Bst, singleChildDeletion) {
     {
-        BST<int> bst;
+        Bst<int> bst;
         bst.insertFromVector({5, 3, 6, 2, 4, 0});
 
         EXPECT_EQ(bst.has(2), true);
@@ -38,7 +38,7 @@ TEST(BST, singleChildDeletion) {
 
     // Root has one child
     {
-        BST<int> bst;
+        Bst<int> bst;
         bst.insertFromVector({1, 2, 3, 4});
 
         EXPECT_EQ(bst.has(1), true);
@@ -48,9 +48,9 @@ TEST(BST, singleChildDeletion) {
     }
 }
 
-TEST(BST, deletion) {
+TEST(Bst, deletion) {
     {
-        BST<int> bst;
+        Bst<int> bst;
         bst.insertFromVector({50, 70, 60, 65, 80, 85, 75, 30, 20, 40, 32, 34, 36});
 
         bst.remove(70);
@@ -58,16 +58,23 @@ TEST(BST, deletion) {
     }
 
     {
-        BST<int> bst;
+        Bst<int> bst;
         bst.insertFromVector({50, 70, 60, 65, 80, 85, 75, 30, 20, 40, 32, 34, 36});
 
         bst.remove(30);
         EXPECT_EQ(bst.has(30), false);
     }
+
+    {
+        Bst<int> bst;
+        bst.insert(5);
+        bst.remove(5);
+        EXPECT_EQ(bst.has(5), false);
+    }
 }
 
 TEST(BST_iterator, inorder) {
-    BST<int> bst;
+    Bst<int> bst;
     bst.insertFromVector({5, 3, 6, 2, 4});
     auto it = bst.getIterator(INORDER);
 
@@ -81,7 +88,7 @@ TEST(BST_iterator, inorder) {
 }
 
 TEST(BST_iterator, preorder) {
-    BST<int> bst;
+    Bst<int> bst;
     bst.insertFromVector({5, 3, 6, 2, 4});
     auto it = bst.getIterator(PREORDER);
 
@@ -95,7 +102,7 @@ TEST(BST_iterator, preorder) {
 }
 
 TEST(BST_iterator, postorder) {
-    BST<int> bst;
+    Bst<int> bst;
     bst.insertFromVector({5, 3, 6, 2, 4});
     auto it = bst.getIterator(POSTORDER);
 
@@ -106,4 +113,30 @@ TEST(BST_iterator, postorder) {
     }
 
     expectVectorsEquality(values, {2, 4, 3, 6, 5});
+}
+
+TEST(Bst, getHeight) {
+    Bst<int> bst;
+    EXPECT_EQ(bst.getHeight(), 0);
+    bst.insert(5);
+    EXPECT_EQ(bst.getHeight(), 1);
+    bst.insert(3);
+    bst.insert(7);
+    EXPECT_EQ(bst.getHeight(), 2);
+    bst.insert(7);
+    EXPECT_EQ(bst.getHeight(), 2);
+}
+
+TEST(Bst, getSize) {
+    Bst<int> bst;
+    EXPECT_EQ(bst.size(), 0);
+    bst.insert(5);
+    EXPECT_EQ(bst.size(), 1);
+    bst.insert(5);
+    EXPECT_EQ(bst.size(), 1);
+
+    bst.insert(4);
+    bst.insert(5);
+    bst.insert(13);
+    EXPECT_EQ(bst.size(), 3);
 }
