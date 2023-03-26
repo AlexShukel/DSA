@@ -223,6 +223,48 @@ public:
             EXPECT_EQ(avl.root->right->left->value, 7);
         }
     }
+
+    static void runDeletionTest() {
+        {
+            Avl<int> avl;
+            avl.remove(5);
+            avl.insert(5);
+            EXPECT_EQ(avl.has(5), true);
+            avl.remove(5);
+            EXPECT_EQ(avl.has(5), false);
+            EXPECT_EQ(avl.root, nullptr);
+        }
+
+        {
+            Avl<int> avl;
+            avl.insertFromVector({5, 7, 4, 3});
+            avl.remove(7);
+
+            EXPECT_EQ(avl.root->value, 4);
+            EXPECT_EQ(avl.root->left->value, 3);
+            EXPECT_EQ(avl.root->right->value, 5);
+            EXPECT_EQ(avl.root->right->isLeaf(), true);
+            EXPECT_EQ(avl.root->left->isLeaf(), true);
+            EXPECT_EQ(avl.root->parent, nullptr);
+        }
+
+        {
+            Avl<int> avl;
+            avl.insertFromVector({8, 10, 4, 12, 6, 2, 1});
+            avl.remove(10);
+
+            EXPECT_EQ(avl.root->value, 4);
+            EXPECT_EQ(avl.root->left->value, 2);
+            EXPECT_EQ(avl.root->left->left->value, 1);
+            EXPECT_EQ(avl.root->left->left->isLeaf(), true);
+            EXPECT_EQ(avl.root->right->value, 8);
+            EXPECT_EQ(avl.root->right->left->value, 6);
+            EXPECT_EQ(avl.root->right->right->value, 12);
+            EXPECT_EQ(avl.root->right->right->isLeaf(), true);
+            EXPECT_EQ(avl.root->right->left->isLeaf(), true);
+            EXPECT_EQ(avl.root->parent, nullptr);
+        }
+    }
 };
 
 TEST(AVL, leftRotation) {
@@ -247,4 +289,8 @@ TEST(AVL, findOverflowedNode) {
 
 TEST(AVL, insert) {
     TestAvl::runInsertTest();
+}
+
+TEST(AVL, deletion) {
+    TestAvl::runDeletionTest();
 }

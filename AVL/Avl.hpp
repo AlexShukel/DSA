@@ -38,6 +38,8 @@ private:
 
     Node<T> *insertNode(T value);
 
+    void applyRotations(Node<T> *X, Node<T> *Z);
+
 public:
     explicit Avl() = default;
 
@@ -67,13 +69,87 @@ Node<T> *Avl<T>::insert(T value) {
     updateBalanceFactors(from, false);
     NodeOverflow<T> nodeOverflow = findOverflowedNode(from);
 
-    Node<T> *X = nodeOverflow.X;
-    Node<T> *Z = nodeOverflow.Z;
-
-    if (!X) {
+    if (!nodeOverflow.X) {
         return from;
     }
 
+    applyRotations(nodeOverflow.X, nodeOverflow.Z);
+
+    return from;
+}
+
+template<class T>
+void Avl<T>::remove(T value) {
+    Node<T> *node = this->findNode(value);
+
+    if (!node) {
+        return;
+    }
+
+    Node<T> *from = this->removeImplementation(node);
+
+    if (!from) {
+        return;
+    }
+
+    updateBalanceFactors(from, true);
+    NodeOverflow<T> nodeOverflow = findOverflowedNode(from);
+
+    if (!nodeOverflow.X) {
+        return;
+    }
+
+    if (nodeOverflow.X == nodeOverflow.Z) {
+        if (nodeOverflow.X->left) {
+            nodeOverflow.Z = nodeOverflow.X->left;
+        } else if (nodeOverflow.X->right) {
+            nodeOverflow.Z = nodeOverflow.X->right;
+        }
+    }
+
+    applyRotations(nodeOverflow.X, nodeOverflow.Z);
+}
+
+template<class T>
+void Avl<T>::updateBalanceFactors(Node<T> *from, bool hasRemoved) {
+    if (from->parent) {
+        if (from->parent->left == from && from->parent->right) {
+            return;
+        }
+
+        if (from->parent->right == from && from->parent->left) {
+            return;
+        }
+    }
+
+    Node<T> *current = from;
+
+    while (current) {
+        if (current->parent) {
+            if (hasRemoved) {
+                --current->parent->height;
+            } else {
+                ++current->parent->height;
+            }
+        }
+
+        current = current->parent;
+    }
+}
+
+template<class T>
+NodeOverflow<T> Avl<T>::findOverflowedNode(Node<T> *from) {
+    auto prev = from;
+    while (from && abs(from->getBalanceFactor()) < 2) {
+        prev = from;
+        from = from->parent;
+    }
+
+    return NodeOverflow<T>(from, prev);
+}
+
+template<class T>
+void Avl<T>::applyRotations(Node<T> *X, Node<T> *Z) {
     Node<T> *newRoot = nullptr;
     Node<T> *prevParent = X->parent;
     bool isLeft;
@@ -106,53 +182,6 @@ Node<T> *Avl<T>::insert(T value) {
     } else {
         this->root = newRoot;
     }
-
-    return from;
-}
-
-template<class T>
-void Avl<T>::remove(T value) {
-    Node<T> *node = this->findNode(value);
-
-    if (!node) {
-        return;
-    }
-
-    this->removeImplementation(node);
-}
-
-template<class T>
-void Avl<T>::updateBalanceFactors(Node<T> *from, bool hasRemoved) {
-    if (from->parent) {
-        if (from->parent->left == from && from->parent->right) {
-            return;
-        }
-
-        if (from->parent->right == from && from->parent->left) {
-            return;
-        }
-    }
-
-    Node<T> *current = from;
-
-    while (current) {
-        if (current->parent) {
-            ++current->parent->height;
-        }
-
-        current = current->parent;
-    }
-}
-
-template<class T>
-NodeOverflow<T> Avl<T>::findOverflowedNode(Node<T> *from) {
-    auto prev = from;
-    while (from && abs(from->getBalanceFactor()) < 2) {
-        prev = from;
-        from = from->parent;
-    }
-
-    return NodeOverflow<T>(from, prev);
 }
 
 template<class T>

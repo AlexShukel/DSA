@@ -64,6 +64,13 @@ TEST(Bst, deletion) {
         bst.remove(30);
         EXPECT_EQ(bst.has(30), false);
     }
+
+    {
+        Bst<int> bst;
+        bst.insert(5);
+        bst.remove(5);
+        EXPECT_EQ(bst.has(5), false);
+    }
 }
 
 TEST(BST_iterator, inorder) {

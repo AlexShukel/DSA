@@ -22,7 +22,7 @@ protected:
 
     Node<T> *findInorderSuccessor(Node<T> *node) const;
 
-    void removeImplementation(Node<T> *node);
+    Node<T> *removeImplementation(Node<T> *node);
 
 public:
     explicit Bst();
@@ -153,58 +153,62 @@ Node<T> *Bst<T>::findInorderSuccessor(Node<T> *node) const {
 }
 
 template<class T>
-void Bst<T>::removeImplementation(Node<T> *node) {
+Node<T> *Bst<T>::removeImplementation(Node<T> *node) {
     T value = node->value;
+
+    Node<T> *parent = node->parent;
 
     // Node is leaf
     if (node->isLeaf()) {
-        if (node->parent) {
-            if (value < node->parent->value) {
-                node->parent->left = nullptr;
+        if (parent) {
+            if (value < parent->value) {
+                parent->left = nullptr;
             } else {
-                node->parent->right = nullptr;
+                parent->right = nullptr;
             }
+        } else {
+            root = nullptr;
         }
 
         delete node;
-        return;
+        return parent;
     }
 
     // Has one left child
     if (!node->right) {
-        if (node->parent) {
-            if (value < node->parent->value) {
-                node->parent->left = node->left;
+        if (parent) {
+            if (value < parent->value) {
+                parent->left = node->left;
             } else {
-                node->parent->right = node->left;
+                parent->right = node->left;
             }
         } else {
             root = node->left;
         }
 
         delete node;
-        return;
+        return parent;
     }
 
     // Has one right child
     if (!node->left) {
-        if (node->parent) {
-            if (value < node->parent->value) {
-                node->parent->left = node->right;
+        if (parent) {
+            if (value < parent->value) {
+                parent->left = node->right;
             } else {
-                node->parent->right = node->right;
+                parent->right = node->right;
             }
         } else {
             root = node->right;
         }
 
         delete node;
-        return;
+        return parent;
     }
 
     Node<T> *temp = findInorderSuccessor(node->right);
     node->value = temp->value;
-    removeImplementation(temp);
+    return removeImplementation(temp);
 }
 
 template<class T>
