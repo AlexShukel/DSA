@@ -22,29 +22,29 @@ void bubbleSort(RandomIt first, RandomIt last, Compare compare) {
             bool shouldMove;
 
             if (rotating) {
-                shouldMove = compare(rotated, *(first + j + 1)) > 0;
+                shouldMove = compare(rotated, first[j + 1]) > 0;
             } else {
-                shouldMove = compare(*(first + j), *(first + j + 1)) > 0;
+                shouldMove = compare(first[j], first[j + 1]) > 0;
             }
 
             if (shouldMove) {
                 if (!rotating) {
-                    rotated = *(first + j);
+                    rotated = first[j];
                     rotating = true;
                 }
 
-                *(first + j) = *(first + j + 1);
+                first[j] = first[j + 1];
                 swapped = true;
             }
 
             if (!shouldMove && rotating) {
-                *(first + j) = rotated;
+                first[j] = rotated;
                 rotating = false;
             }
         }
 
         if (rotating) {
-            *(first + j) = rotated;
+            first[j] = rotated;
         }
 
         if (!swapped) {
