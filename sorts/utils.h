@@ -9,4 +9,6 @@
 
 void expectVectorToBeSorted(const std::vector<int> &arr);
 
+int compare(int a, int b);
+
 #endif //DSA_UTILS_H

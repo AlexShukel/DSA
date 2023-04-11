@@ -9,3 +9,7 @@ void expectVectorToBeSorted(const std::vector<int> &arr) {
         EXPECT_GE(arr[i + 1], arr[i]);
     }
 }
+
+int compare(int a, int b) {
+    return a - b;
+}

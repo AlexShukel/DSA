@@ -3,11 +3,11 @@
 //
 
 #include "gtest/gtest.h"
-#include "bubbleSort.h"
+#include "cocktailShakerSort.h"
 #include "utils.h"
 
-TEST(sorts, bubble) {
+TEST(sorts, cocktail_shaker) {
     std::vector<int> arr = {5, 1, 4, 2, 8, 0, 2};
-    bubbleSort(arr.begin(), arr.end(), compare);
+    cocktailShakerSort(arr.begin(), arr.end(), compare);
     expectVectorToBeSorted(arr);
 }
