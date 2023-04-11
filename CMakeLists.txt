@@ -18,6 +18,7 @@ enable_testing()
 add_subdirectory(sqrt)
 add_subdirectory(BST)
 add_subdirectory(AVL)
+add_subdirectory(sorts)
 
 add_executable(DSA main.cpp)
 

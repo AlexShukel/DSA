@@ -1,0 +1,12 @@
+//
+// Created by alexs on 2023-04-11.
+//
+
+#ifndef DSA_UTILS_H
+#define DSA_UTILS_H
+
+#include "gtest/gtest.h"
+
+void expectVectorToBeSorted(const std::vector<int> &arr);
+
+#endif //DSA_UTILS_H
