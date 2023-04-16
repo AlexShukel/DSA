@@ -5,6 +5,10 @@
 #include "utils.h"
 
 void expectVectorToBeSorted(const std::vector<int> &arr) {
+    if (arr.size() <= 1) {
+        return;
+    }
+
     for (int i = 0; i < arr.size() - 1; ++i) {
         EXPECT_GE(arr[i + 1], arr[i]);
     }
