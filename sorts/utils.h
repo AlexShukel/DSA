@@ -11,4 +11,6 @@ void expectVectorToBeSorted(const std::vector<int> &arr);
 
 int compare(int a, int b);
 
+std::vector<std::vector<int>> getTestsData();
+
 #endif //DSA_UTILS_H

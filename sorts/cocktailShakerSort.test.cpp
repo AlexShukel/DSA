@@ -7,7 +7,10 @@
 #include "utils.h"
 
 TEST(sorts, cocktail_shaker) {
-    std::vector<int> arr = {5, 1, 4, 2, 8, 0, 2};
-    cocktailShakerSort(arr.begin(), arr.end(), compare);
-    expectVectorToBeSorted(arr);
+    auto tests = getTestsData();
+
+    for (auto arr: tests) {
+        cocktailShakerSort(arr.begin(), arr.end(), compare);
+        expectVectorToBeSorted(arr);
+    }
 }

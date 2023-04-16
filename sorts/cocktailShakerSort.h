@@ -11,15 +11,19 @@ template<class RandomIt, class Compare>
 void cocktailShakerSort(RandomIt first, RandomIt last, Compare compare) {
     size_t size = std::distance(first, last);
 
-    size_t begin = 0, end = size - 2;
+    if (size <= 1) {
+        return;
+    }
 
-    while (begin < end) {
+    int begin = 0, end = (int) size - 2;
+
+    while (begin <= end) {
         bool rotating = false;
         typename RandomIt::value_type rotated;
 
-        size_t newBegin, newEnd;
+        int newBegin = end, newEnd = begin;
 
-        size_t i;
+        int i;
         for (i = begin; i <= end; ++i) {
             bool shouldMove;
 
@@ -53,8 +57,7 @@ void cocktailShakerSort(RandomIt first, RandomIt last, Compare compare) {
         end = newEnd - 1;
         rotating = false;
 
-        i = end;
-        while (true) {
+        for (i = end; i >= begin; --i) {
             bool shouldMove;
 
             if (rotating) {
@@ -78,16 +81,10 @@ void cocktailShakerSort(RandomIt first, RandomIt last, Compare compare) {
                 first[i + 1] = rotated;
                 rotating = false;
             }
-
-            if (i == begin) {
-                break;
-            }
-
-            --i;
         }
 
         if (rotating) {
-            first[i] = rotated;
+            first[begin] = rotated;
         }
 
         begin = newBegin + 1;

@@ -10,7 +10,7 @@
 template<class RandomIt, class Compare>
 void merge(RandomIt first, RandomIt mid, RandomIt last, Compare compare) {
     size_t size = std::distance(first, last);
-    typedef typename std::iterator_traits<RandomIt>::value_type T;
+    typedef typename RandomIt::value_type T;
     std::vector<T> temp;
     temp.resize(size);
 
@@ -34,17 +34,12 @@ void merge(RandomIt first, RandomIt mid, RandomIt last, Compare compare) {
         ++i;
     }
 
-//    for (i = 0; i < size; ++i) {
-//        std::cout << temp[i] << " ";
-//    }
-//    std::cout << std::endl;
-
     std::move(temp.begin(), temp.end(), first);
 }
 
 template<class RandomIt, class Compare>
 void mergeSort(RandomIt first, RandomIt last, Compare compare) {
-    size_t size = first == last ? 0 : std::distance(first, last);
+    size_t size = std::distance(first, last);
 
     if (size <= 1) {
         return;

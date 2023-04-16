@@ -7,7 +7,10 @@
 #include "utils.h"
 
 TEST(sorts, bubble) {
-    std::vector<int> arr = {5, 1, 4, 2, 8, 0, 2};
-    bubbleSort(arr.begin(), arr.end(), compare);
-    expectVectorToBeSorted(arr);
+    auto tests = getTestsData();
+
+    for (auto arr: tests) {
+        bubbleSort(arr.begin(), arr.end(), compare);
+        expectVectorToBeSorted(arr);
+    }
 }
