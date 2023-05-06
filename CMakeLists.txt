@@ -18,6 +18,9 @@ enable_testing()
 add_subdirectory(sqrt)
 add_subdirectory(BST)
 add_subdirectory(AVL)
+add_subdirectory(sorts)
+add_subdirectory(hungarian)
+add_subdirectory(edit-distance)
 
 add_executable(DSA main.cpp)
 
