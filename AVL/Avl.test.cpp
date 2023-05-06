@@ -222,6 +222,34 @@ public:
             EXPECT_EQ(avl.root->right->right->value, 12);
             EXPECT_EQ(avl.root->right->left->value, 7);
         }
+
+        {
+            Avl<int> avl;
+            avl.insertFromVector({1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11});
+            avl.insert(12);
+
+            EXPECT_EQ(avl.root->value, 8);
+
+            EXPECT_EQ(avl.root->left->value, 4);
+            EXPECT_EQ(avl.root->left->left->value, 2);
+            EXPECT_EQ(avl.root->left->left->left->value, 1);
+            EXPECT_EQ(avl.root->left->left->left->isLeaf(), true);
+            EXPECT_EQ(avl.root->left->left->right->value, 3);
+            EXPECT_EQ(avl.root->left->left->right->isLeaf(), true);
+            EXPECT_EQ(avl.root->left->right->value, 6);
+            EXPECT_EQ(avl.root->left->right->left->value, 5);
+            EXPECT_EQ(avl.root->left->right->left->isLeaf(), true);
+            EXPECT_EQ(avl.root->left->right->right->value, 7);
+            EXPECT_EQ(avl.root->left->right->right->isLeaf(), true);
+
+            EXPECT_EQ(avl.root->right->value, 10);
+            EXPECT_EQ(avl.root->right->left->value, 9);
+            EXPECT_EQ(avl.root->right->left->isLeaf(), true);
+            EXPECT_EQ(avl.root->right->right->value, 11);
+            EXPECT_EQ(avl.root->right->right->right->value, 12);
+            EXPECT_EQ(avl.root->right->right->right->isLeaf(), true);
+            EXPECT_EQ(avl.root->right->right->left, nullptr);
+        }
     }
 
     static void runDeletionTest() {
