@@ -37,6 +37,8 @@ public:
 
     bool has(T value);
 
+    T *find(T value);
+
     BstIterator<T> getIterator(TraverseOrder order) const;
 
     size_t getHeight() const;
@@ -214,6 +216,17 @@ Node<T> *Bst<T>::removeImplementation(Node<T> *node) {
 template<class T>
 bool Bst<T>::has(T value) {
     return static_cast<bool>(findNode(value));
+}
+
+template<class T>
+T *Bst<T>::find(T value) {
+    auto node = findNode(value);
+
+    if (!node) {
+        return nullptr;
+    }
+
+    return &(node->value);
 }
 
 template<class T>

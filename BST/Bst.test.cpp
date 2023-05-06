@@ -140,3 +140,12 @@ TEST(Bst, getSize) {
     bst.insert(13);
     EXPECT_EQ(bst.size(), 3);
 }
+
+TEST(Bst, find) {
+    Bst<int> bst;
+    bst.insert(5);
+    auto ptr1 = bst.find(5);
+    EXPECT_EQ(*ptr1, 5);
+    auto ptr2 = bst.find(10);
+    EXPECT_EQ(ptr2, nullptr);
+}
