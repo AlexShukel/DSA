@@ -18,7 +18,7 @@ protected:
     size_t height;
     size_t _size;
 
-    Node<T> *findNode(int value) const;
+    Node<T> *findNode(const T &value) const;
 
     Node<T> *findInorderSuccessor(Node<T> *node) const;
 
@@ -31,13 +31,13 @@ public:
 
     void insertFromVector(const std::vector<T> &values);
 
-    virtual Node<T> *insert(T value);
+    virtual Node<T> *insert(const T &value);
 
-    virtual void remove(T value);
+    virtual void remove(const T &value);
 
-    bool has(T value);
+    bool has(const T &value);
 
-    T *find(T value);
+    T *find(const T &value);
 
     BstIterator<T> getIterator(TraverseOrder order) const;
 
@@ -71,7 +71,7 @@ void Bst<T>::insertFromVector(const std::vector<T> &values) {
 }
 
 template<class T>
-Node<T> *Bst<T>::insert(T value) {
+Node<T> *Bst<T>::insert(const T &value) {
     if (!root) {
         root = new Node<T>(value, (Node<T> *) nullptr);
         height = 1;
@@ -111,7 +111,7 @@ Node<T> *Bst<T>::insert(T value) {
 }
 
 template<class T>
-void Bst<T>::remove(T value) {
+void Bst<T>::remove(const T &value) {
     Node<T> *node = findNode(value);
 
     if (!node) {
@@ -127,7 +127,7 @@ BstIterator<T> Bst<T>::getIterator(TraverseOrder order) const {
 }
 
 template<class T>
-Node<T> *Bst<T>::findNode(int value) const {
+Node<T> *Bst<T>::findNode(const T &value) const {
     Node<T> *node = root;
 
     while (node) {
@@ -214,12 +214,12 @@ Node<T> *Bst<T>::removeImplementation(Node<T> *node) {
 }
 
 template<class T>
-bool Bst<T>::has(T value) {
+bool Bst<T>::has(const T &value) {
     return static_cast<bool>(findNode(value));
 }
 
 template<class T>
-T *Bst<T>::find(T value) {
+T *Bst<T>::find(const T &value) {
     auto node = findNode(value);
 
     if (!node) {

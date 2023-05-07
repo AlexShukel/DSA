@@ -13,7 +13,7 @@ struct Node {
     Node *parent;
     int height;
 
-    Node(T value, Node *parent);
+    Node(const T &value, Node *parent);
 
     [[nodiscard]] bool isLeaf() const;
 
@@ -21,8 +21,8 @@ struct Node {
 };
 
 template<class T>
-Node<T>::Node(T value, Node<T> *parent): value(value), left(nullptr), right(nullptr), parent(parent),
-                                         height(1) {}
+Node<T>::Node(const T &value, Node<T> *parent): value(value), left(nullptr), right(nullptr), parent(parent),
+                                                height(1) {}
 
 template<class T>
 bool Node<T>::isLeaf() const {

@@ -36,7 +36,7 @@ private:
 
     void updateBalanceFactors(Node<T> *from, bool hasRemoved);
 
-    Node<T> *insertNode(T value);
+    Node<T> *insertNode(const T &value);
 
     void applyRotations(Node<T> *X, Node<T> *Z);
 
@@ -45,9 +45,9 @@ public:
 
     explicit Avl(const std::vector<T> &values);
 
-    Node<T> *insert(T value);
+    Node<T> *insert(const T &value);
 
-    void remove(T value);
+    void remove(const T &value);
 };
 
 template<class T>
@@ -58,12 +58,12 @@ Avl<T>::Avl(const std::vector<T> &values) {
 }
 
 template<class T>
-Node<T> *Avl<T>::insertNode(T value) {
+Node<T> *Avl<T>::insertNode(const T &value) {
     return Bst<T>::insert(value);
 }
 
 template<class T>
-Node<T> *Avl<T>::insert(T value) {
+Node<T> *Avl<T>::insert(const T &value) {
     Node<T> *from = insertNode(value);
 
     updateBalanceFactors(from, false);
@@ -79,7 +79,7 @@ Node<T> *Avl<T>::insert(T value) {
 }
 
 template<class T>
-void Avl<T>::remove(T value) {
+void Avl<T>::remove(const T &value) {
     Node<T> *node = this->findNode(value);
 
     if (!node) {
