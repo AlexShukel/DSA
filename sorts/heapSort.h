@@ -5,6 +5,21 @@
 #ifndef DSA_HEAPSORT_H
 #define DSA_HEAPSORT_H
 
+#include <algorithm>
+
+template<class T>
+int compare(T a, T b) {
+    if (a < b) {
+        return -1;
+    }
+
+    if (a > b) {
+        return 1;
+    }
+
+    return 0;
+}
+
 template<class RandomIt, class Compare>
 void siftDown(RandomIt arr, int firstIndex, int lastIndex, Compare compare) {
     int root = firstIndex;

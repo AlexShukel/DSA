@@ -7,6 +7,19 @@
 
 #include <algorithm>
 
+template<class T>
+int compare(T a, T b) {
+    if (a < b) {
+        return -1;
+    }
+
+    if (a > b) {
+        return 1;
+    }
+
+    return 0;
+}
+
 template<class RandomIt, class Compare>
 void cocktailShakerSort(RandomIt first, RandomIt last, Compare compare) {
     size_t size = std::distance(first, last);
@@ -19,7 +32,7 @@ void cocktailShakerSort(RandomIt first, RandomIt last, Compare compare) {
 
     while (begin <= end) {
         bool rotating = false;
-        typename RandomIt::value_type rotated;
+        typename RandomIt::value_type rotated = *first;
 
         int newBegin = end, newEnd = begin;
 

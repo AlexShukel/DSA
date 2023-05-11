@@ -7,17 +7,30 @@
 
 #include <algorithm>
 
+template<class T>
+int compare(T a, T b) {
+    if (a < b) {
+        return -1;
+    }
+
+    if (a > b) {
+        return 1;
+    }
+
+    return 0;
+}
+
 template<class RandomIt, class Compare>
 void bubbleSort(RandomIt first, RandomIt last, Compare compare) {
     size_t size = std::distance(first, last);
 
-    for (int i = 1; i < size; ++i) {
+    for (size_t i = 1; i < size; ++i) {
         bool swapped = false;
 
         bool rotating = false;
-        typename RandomIt::value_type rotated;
+        typename RandomIt::value_type rotated = *first;
 
-        int j;
+        size_t j;
         for (j = 0; j < size - i; ++j) {
             bool shouldMove;
 

@@ -5,13 +5,14 @@
 #include "utils.h"
 #include <random>
 #include <limits>
+#include <ctime>
 
 void expectVectorToBeSorted(const std::vector<int> &arr) {
     if (arr.size() <= 1) {
         return;
     }
 
-    for (int i = 0; i < arr.size() - 1; ++i) {
+    for (size_t i = 0; i < arr.size() - 1; ++i) {
         EXPECT_GE(arr[i + 1], arr[i]);
     }
 }
@@ -29,7 +30,7 @@ int compare(int a, int b) {
 }
 
 std::vector<int> generateRandomArray(size_t size) {
-    srand(time(nullptr));
+    srand(static_cast<unsigned int>(time(nullptr)));
 
     std::vector<int> arr;
     arr.resize(size);

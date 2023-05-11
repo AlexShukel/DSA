@@ -152,7 +152,7 @@ template<class T>
 void Avl<T>::applyRotations(Node<T> *X, Node<T> *Z) {
     Node<T> *newRoot = nullptr;
     Node<T> *prevParent = X->parent;
-    bool isLeft;
+    bool isLeft = false;
     if (X->parent) {
         isLeft = X->parent->left == X;
     }
