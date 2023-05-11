@@ -6,8 +6,7 @@
 #include "HashTable.hpp"
 
 TEST(hash_table, chaining_simple) {
-    HashTable<int, size_t> table([](int item, size_t capacity) { return item % capacity; },
-                                 [](size_t key) { return key; }, 8);
+    HashTable<int> table([](int item) { return item; }, 8);
 
     EXPECT_EQ(table.has(1), false);
     table.insert(1);
@@ -28,8 +27,7 @@ TEST(hash_table, chaining_simple) {
 }
 
 TEST(hash_table, chaining_resizing) {
-    HashTable<int, size_t> table([](int item, size_t capacity) { return item % capacity; },
-                                 [](size_t key) { return key; }, 4);
+    HashTable<int> table([](int item) { return item; }, 4);
 
     EXPECT_EQ(table.getCapacity(), 4);
     table.insert(1);
