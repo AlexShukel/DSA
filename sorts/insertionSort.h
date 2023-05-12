@@ -18,8 +18,13 @@ void insert(RandomIt first, RandomIt last) {
 
 template<class RandomIt, class Compare>
 void insertionSort(RandomIt first, RandomIt last, Compare compare) {
+    if (first == last) {
+        return;
+    }
+
     for (auto end = first + 1; end != last; ++end) {
-        auto upperBound = std::upper_bound(first, end, *end, compare);
+        RandomIt upperBound = std::upper_bound(first, end, *end, compare);
+
         if (upperBound != end) {
             insert(upperBound, end);
         }
