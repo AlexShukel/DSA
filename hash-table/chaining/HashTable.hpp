@@ -13,13 +13,13 @@ struct Node {
     T value;
     Node *next = nullptr;
 
-    explicit Node(T value) : value(value) {};
+    explicit Node(const T &value) : value(value) {};
 };
 
 template<class T>
 class HashTable {
 private:
-    std::function<long long(T)> hash;
+    std::function<long long(const T &)> hash;
     size_t size = 0;
     size_t capacity;
     size_t initialCapacity;
@@ -27,7 +27,9 @@ private:
 
     size_t prehash(long long hashValue);
 
-    void insertInChain(Node<T> *&first, Node<T> *node);
+    void insertNodeInChain(Node<T> *&first, Node<T> *node);
+
+    bool insertInChain(Node<T> *&first, const T &item);
 
     bool removeFromChain(Node<T> *&first, const T &item);
 
@@ -42,7 +44,9 @@ private:
     void shrinkTable();
 
 public:
-    HashTable(const std::function<long long(T)> &hash, size_t initialCapacity);
+    HashTable(const std::function<long long(const T &)> &hash, size_t initialCapacity);
+
+    ~HashTable();
 
     void insert(const T &item);
 
@@ -58,12 +62,21 @@ public:
 // PUBLIC methods
 
 template<class T>
-HashTable<T>::HashTable(const std::function<long long(T)> &hash, size_t initialCapacity) {
+HashTable<T>::HashTable(const std::function<long long(const T &)> &hash, size_t initialCapacity) {
     this->hash = hash;
     capacity = initialCapacity;
     this->initialCapacity = initialCapacity;
     table.resize(initialCapacity);
     std::fill(table.begin(), table.end(), nullptr);
+}
+
+template<class T>
+HashTable<T>::~HashTable() {
+    std::vector<Node<T> *> nodes;
+    collectCurrentNodes(nodes);
+    for (auto node: nodes) {
+        delete node;
+    }
 }
 
 template<class T>
@@ -83,25 +96,27 @@ size_t HashTable<T>::getCapacity() const {
 
 template<class T>
 void HashTable<T>::insert(const T &item) {
-    if (size == capacity) {
-        growTable();
-    }
-
     size_t index = prehash(hash(item));
-    insertInChain(table[index], new Node<T>(item));
-    ++size;
+    bool inserted = insertInChain(table[index], item);
+    if (inserted) {
+        ++size;
+
+        if (size == capacity) {
+            growTable();
+        }
+    }
 }
 
 template<class T>
 void HashTable<T>::remove(const T &item) {
-    if (capacity != initialCapacity && size < capacity / 4) {
-        shrinkTable();
-    }
-
     size_t index = prehash(hash(item));
     bool removed = removeFromChain(table[index], item);
     if (removed) {
         --size;
+
+        if (capacity != initialCapacity && size < capacity / 4) {
+            shrinkTable();
+        }
     }
 }
 
@@ -114,7 +129,7 @@ bool HashTable<T>::has(const T &item) {
 // PRIVATE methods
 
 template<class T>
-void HashTable<T>::insertInChain(Node<T> *&first, Node<T> *node) {
+void HashTable<T>::insertNodeInChain(Node<T> *&first, Node<T> *node) {
     if (!first) {
         first = node;
         return;
@@ -125,6 +140,30 @@ void HashTable<T>::insertInChain(Node<T> *&first, Node<T> *node) {
         current = current->next;
     }
     current->next = node;
+}
+
+template<class T>
+bool HashTable<T>::insertInChain(Node<T> *&first, const T &item) {
+    if (!first) {
+        first = new Node<T>(item);
+        return true;
+    }
+
+    Node<T> *current = first;
+
+    if (current->value == item) {
+        return false;
+    }
+
+    while (current->next) {
+        if (current->value == item) {
+            return false;
+        }
+
+        current = current->next;
+    }
+    current->next = new Node<T>(item);
+    return true;
 }
 
 template<class T>
@@ -144,9 +183,10 @@ bool HashTable<T>::removeFromChain(Node<T> *&first, const T &item) {
         return false;
     }
 
-    if (prev == first) {
+    if (prev == current) {
+        auto newHead = first->next;
         delete first;
-        first = nullptr;
+        first = newHead;
         return true;
     }
 
@@ -165,13 +205,11 @@ bool HashTable<T>::hasInChain(Node<T> *slot, const T &item) {
         slot = slot->next;
     }
 
-    return static_cast<bool>(slot);
+    return slot != nullptr;
 }
 
 template<class T>
 void HashTable<T>::collectCurrentNodes(std::vector<Node<T> *> &nodes) {
-    size_t index = 0;
-
     for (size_t i = 0; i < capacity; ++i) {
         auto current = table[i];
         Node<T> *prev = nullptr;
@@ -195,7 +233,7 @@ template<class T>
 void HashTable<T>::insertNodes(const std::vector<Node<T> *> &nodes) {
     for (auto node: nodes) {
         size_t index = prehash(hash(node->value));
-        insertInChain(table[index], node);
+        insertNodeInChain(table[index], node);
     }
 }
 

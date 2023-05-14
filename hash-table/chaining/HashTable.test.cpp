@@ -6,7 +6,7 @@
 #include "HashTable.hpp"
 
 TEST(hash_table, chaining_simple) {
-    HashTable<int> table([](int item) { return item; }, 8);
+    HashTable<int> table([](const int &item) { return item; }, 8);
 
     EXPECT_EQ(table.has(1), false);
     table.insert(1);
@@ -24,10 +24,15 @@ TEST(hash_table, chaining_simple) {
 
     table.remove(17);
     EXPECT_EQ(table.has(17), false);
+
+    auto prevSize = table.getSize();
+    table.insert(1);
+    // Should insert only unique values
+    EXPECT_EQ(table.getSize(), prevSize);
 }
 
 TEST(hash_table, chaining_resizing) {
-    HashTable<int> table([](int item) { return item; }, 4);
+    HashTable<int> table([](const int &item) { return item; }, 4);
 
     EXPECT_EQ(table.getCapacity(), 4);
     table.insert(1);
@@ -43,4 +48,41 @@ TEST(hash_table, chaining_resizing) {
     table.remove(2);
     table.remove(1);
     EXPECT_EQ(table.getCapacity(), 4);
+}
+
+TEST(hash_table, crash_test) {
+    HashTable<std::string> table([](const std::string &item) {
+        return item.size();
+    }, 4);
+
+    EXPECT_EQ(table.has(""), false);
+    EXPECT_EQ(table.has("a"), false);
+    EXPECT_EQ(table.has("aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa"), false);
+    table.remove("");
+    table.remove("a");
+    table.remove("aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa");
+
+    table.insert("a");
+    table.insert("a");
+    table.insert("a");
+
+    EXPECT_EQ(table.getSize(), 1);
+
+    table.remove("");
+    table.remove("b");
+    table.remove("aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa");
+
+    EXPECT_EQ(table.has("a"), true);
+
+    table.insert("b");
+    table.insert("c");
+    table.insert("d");
+
+    EXPECT_EQ(table.getSize(), 4);
+
+    table.remove("a");
+
+    EXPECT_EQ(table.has("b") && table.has("c") && table.has("d"), true);
+
+    table.remove("c");
 }
