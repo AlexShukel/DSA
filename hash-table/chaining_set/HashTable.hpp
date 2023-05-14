@@ -1,5 +1,6 @@
 //
 // Created by alexs on 2023-05-07.
+// This hash table implemented as a set (values without duplicates and there is function has).
 //
 
 #ifndef DSA_HASHTABLE_H
