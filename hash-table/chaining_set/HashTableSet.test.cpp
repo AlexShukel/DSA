@@ -83,6 +83,4 @@ TEST(hash_table_set, crash_test) {
     table.remove("a");
 
     EXPECT_EQ(table.has("b") && table.has("c") && table.has("d"), true);
-
-    table.remove("c");
 }

@@ -65,7 +65,7 @@ public:
 template<class T>
 HashTableSet<T>::HashTableSet(const std::function<long long(const T &)> &hash, size_t initialCapacity) {
     this->hash = hash;
-    capacity = initialCapacity;
+    this->capacity = initialCapacity;
     this->initialCapacity = initialCapacity;
     table.resize(initialCapacity);
     std::fill(table.begin(), table.end(), nullptr);
@@ -78,11 +78,6 @@ HashTableSet<T>::~HashTableSet() {
     for (auto node: nodes) {
         delete node;
     }
-}
-
-template<class T>
-size_t HashTableSet<T>::prehash(long long hashValue) {
-    return hashValue % capacity;
 }
 
 template<class T>
@@ -128,6 +123,11 @@ bool HashTableSet<T>::has(const T &item) {
 }
 
 // PRIVATE methods
+
+template<class T>
+size_t HashTableSet<T>::prehash(long long hashValue) {
+    return hashValue % capacity;
+}
 
 template<class T>
 void HashTableSet<T>::insertNodeInChain(Node<T> *&first, Node<T> *node) {
