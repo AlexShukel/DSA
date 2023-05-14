@@ -9,7 +9,7 @@
 
 void expectVectorToBeSorted(const std::vector<int> &arr);
 
-int compare(int a, int b);
+bool compare(const int &a, const int &b);
 
 std::vector<std::vector<int>> getTestsData();
 

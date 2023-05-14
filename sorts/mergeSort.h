@@ -7,19 +7,6 @@
 
 #include <vector>
 
-template<class T>
-int compare(T a, T b) {
-    if (a < b) {
-        return -1;
-    }
-
-    if (a > b) {
-        return 1;
-    }
-
-    return 0;
-}
-
 template<class RandomIt, class Compare>
 void merge(RandomIt first, RandomIt mid, RandomIt last, Compare compare) {
     size_t size = std::distance(first, last);
@@ -36,7 +23,7 @@ void merge(RandomIt first, RandomIt mid, RandomIt last, Compare compare) {
         } else if (right == last) {
             temp[i] = *left;
             ++left;
-        } else if (compare(*left, *right) > 0) {
+        } else if (!compare(*left, *right)) {
             temp[i] = *right;
             ++right;
         } else {

@@ -17,16 +17,8 @@ void expectVectorToBeSorted(const std::vector<int> &arr) {
     }
 }
 
-int compare(int a, int b) {
-    if (a < b) {
-        return -1;
-    }
-
-    if (a > b) {
-        return 1;
-    }
-
-    return 0;
+bool compare(const int &a, const int &b) {
+    return a <= b;
 }
 
 std::vector<int> generateRandomArray(size_t size) {

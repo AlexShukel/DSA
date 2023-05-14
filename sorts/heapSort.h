@@ -7,19 +7,6 @@
 
 #include <algorithm>
 
-template<class T>
-int compare(T a, T b) {
-    if (a < b) {
-        return -1;
-    }
-
-    if (a > b) {
-        return 1;
-    }
-
-    return 0;
-}
-
 template<class RandomIt, class Compare>
 void siftDown(RandomIt arr, int firstIndex, int lastIndex, Compare compare) {
     int root = firstIndex;
@@ -29,11 +16,11 @@ void siftDown(RandomIt arr, int firstIndex, int lastIndex, Compare compare) {
         int rightChild = leftChild + 1;
         int swap = root;
 
-        if (compare(arr[swap], arr[leftChild]) < 0) {
+        if (compare(arr[swap], arr[leftChild])) {
             swap = leftChild;
         }
 
-        if (rightChild <= lastIndex && compare(arr[swap], arr[rightChild]) < 0) {
+        if (rightChild <= lastIndex && compare(arr[swap], arr[rightChild])) {
             swap = rightChild;
         }
 

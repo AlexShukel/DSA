@@ -6,6 +6,10 @@
 #define DSA_INTROSORT_H
 
 #include "heapSort.h"
+#include "insertionSort.h"
+
+#define MAX_RECURSION_DEPTH 100
+#define INSERTION_SORT_THRESHOLD 50
 
 template<class RandomIt, class Compare>
 RandomIt partitionHoare(RandomIt first, RandomIt last, Compare compare) {
@@ -13,11 +17,11 @@ RandomIt partitionHoare(RandomIt first, RandomIt last, Compare compare) {
     auto i = first, j = pivot - 1;
 
     while (true) {
-        while (compare(*i, *pivot) <= 0 && i != last - 1) {
+        while (compare(*i, *pivot) && i != last - 1) {
             ++i;
         }
 
-        while (compare(*j, *pivot) > 0 && j != first) {
+        while (!compare(*j, *pivot) && j != first) {
             --j;
         }
 
@@ -36,7 +40,14 @@ RandomIt partitionHoare(RandomIt first, RandomIt last, Compare compare) {
 
 template<class RandomIt, class Compare>
 void introSortImpl(RandomIt first, RandomIt last, Compare compare, int maxDepth) {
-    if (std::distance(first, last) <= 1) {
+    auto size = std::distance(first, last);
+
+    if (size <= 1) {
+        return;
+    }
+
+    if (size <= INSERTION_SORT_THRESHOLD) {
+        insertionSort(first, last, compare);
         return;
     }
 
@@ -50,8 +61,6 @@ void introSortImpl(RandomIt first, RandomIt last, Compare compare, int maxDepth)
     introSortImpl(first, pivot, compare, maxDepth - 1);
     introSortImpl(pivot, last, compare, maxDepth - 1);
 }
-
-#define MAX_RECURSION_DEPTH 100
 
 template<class RandomIt, class Compare>
 void introSort(RandomIt first, RandomIt last, Compare compare) {

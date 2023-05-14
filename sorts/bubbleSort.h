@@ -7,19 +7,6 @@
 
 #include <algorithm>
 
-template<class T>
-int compare(T a, T b) {
-    if (a < b) {
-        return -1;
-    }
-
-    if (a > b) {
-        return 1;
-    }
-
-    return 0;
-}
-
 template<class RandomIt, class Compare>
 void bubbleSort(RandomIt first, RandomIt last, Compare compare) {
     size_t size = std::distance(first, last);
@@ -35,9 +22,9 @@ void bubbleSort(RandomIt first, RandomIt last, Compare compare) {
             bool shouldMove;
 
             if (rotating) {
-                shouldMove = compare(rotated, first[j + 1]) > 0;
+                shouldMove = !compare(rotated, first[j + 1]);
             } else {
-                shouldMove = compare(first[j], first[j + 1]) > 0;
+                shouldMove = !compare(first[j], first[j + 1]);
             }
 
             if (shouldMove) {
