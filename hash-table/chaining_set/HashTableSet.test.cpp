@@ -3,10 +3,10 @@
 //
 
 #include "gtest/gtest.h"
-#include "HashTable.hpp"
+#include "HashTableSet.hpp"
 
-TEST(hash_table, chaining_simple) {
-    HashTable<int> table([](const int &item) { return item; }, 8);
+TEST(hash_table_set, chaining_simple) {
+    HashTableSet<int> table([](const int &item) { return item; }, 8);
 
     EXPECT_EQ(table.has(1), false);
     table.insert(1);
@@ -31,8 +31,8 @@ TEST(hash_table, chaining_simple) {
     EXPECT_EQ(table.getSize(), prevSize);
 }
 
-TEST(hash_table, chaining_resizing) {
-    HashTable<int> table([](const int &item) { return item; }, 4);
+TEST(hash_table_set, chaining_resizing) {
+    HashTableSet<int> table([](const int &item) { return item; }, 4);
 
     EXPECT_EQ(table.getCapacity(), 4);
     table.insert(1);
@@ -50,8 +50,8 @@ TEST(hash_table, chaining_resizing) {
     EXPECT_EQ(table.getCapacity(), 4);
 }
 
-TEST(hash_table, crash_test) {
-    HashTable<std::string> table([](const std::string &item) {
+TEST(hash_table_set, crash_test) {
+    HashTableSet<std::string> table([](const std::string &item) {
         return item.size();
     }, 4);
 
