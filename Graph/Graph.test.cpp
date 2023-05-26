@@ -18,4 +18,25 @@ TEST(graph, init) {
 
     EXPECT_EQ(g.verticesSize(), 1);
     EXPECT_EQ(g.edgesSize(), 0);
+
+    g.addVertex(1);
+    g.addVertex(2);
+    g.addVertex(3);
+
+    g.addEdge(0, 1);
+    g.addEdge(0, 2);
+    g.addEdge(0, 3);
+
+    EXPECT_EQ(g.verticesSize(), 4);
+    EXPECT_EQ(g.edgesSize(), 3);
+    EXPECT_EQ(g.getVertexNeighboursCount(0), 3);
+    EXPECT_EQ(g.getNeighbours(0).size(), 3);
+    EXPECT_EQ(g.getNeighbour(0, 1), 2);
+    EXPECT_EQ(g.hasEdge(0, 1), true);
+    EXPECT_EQ(g.hasEdge(1, 0), false);
+
+    g.removeVertex(0);
+
+    EXPECT_EQ(g.verticesSize(), 3);
+    EXPECT_EQ(g.edgesSize(), 0);
 }

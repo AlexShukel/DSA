@@ -31,6 +31,14 @@ public:
     void removeVertex(TVertex vertex);
 
     void removeEdge(TVertex from, TVertex to);
+
+    size_t getVertexNeighboursCount(TVertex vertex) const;
+
+    std::vector<TVertex> getNeighbours(TVertex vertex) const;
+
+    TVertex getNeighbour(TVertex vertex, size_t pos) const;
+
+    bool hasEdge(TVertex from, TVertex to) const;
 };
 
 template<class TVertex>
@@ -102,6 +110,49 @@ void Graph<TVertex>::removeEdge(TVertex from, TVertex to) {
 
     --_edgesSize;
     adj[from].erase(it, it + 1);
+}
+
+template<class TVertex>
+size_t Graph<TVertex>::getVertexNeighboursCount(TVertex vertex) const {
+    if (!hasVertex(vertex)) {
+        throw std::logic_error("Cannot count the neighbours of non-existing vertex!");
+    }
+
+    return (*adj.find(vertex)).second.size();
+}
+
+template<class TVertex>
+std::vector<TVertex> Graph<TVertex>::getNeighbours(TVertex vertex) const {
+    if (!hasVertex(vertex)) {
+        throw std::logic_error("Cannot return neighbours of non-existing vertex!");
+    }
+
+    return adj.find(vertex)->second;
+}
+
+template<class TVertex>
+TVertex Graph<TVertex>::getNeighbour(TVertex vertex, size_t pos) const {
+    if (!hasVertex(vertex)) {
+        throw std::logic_error("Cannot return a neighbour of non-existing vertex!");
+    }
+
+    auto &list = adj.find(vertex)->second;
+
+    if (pos >= list.size()) {
+        throw std::logic_error("Position of neighbour is out of bounds!");
+    }
+
+    return list[pos];
+}
+
+template<class TVertex>
+bool Graph<TVertex>::hasEdge(TVertex from, TVertex to) const {
+    if (!hasVertex(from) || !hasVertex(to)) {
+        throw std::logic_error("Cannot determine if there is an edge between non-existing vertices!");
+    }
+
+    auto &list = adj.find(from)->second;
+    return std::find(list.begin(), list.end(), to) != list.end();
 }
 
 #endif //DSA_GRAPH_H
