@@ -1,0 +1,4 @@
+add_subdirectory(graph)
+add_subdirectory(oriented-graph)
+add_subdirectory(weighted-graph)
+add_subdirectory(weighted-oriented-graph)

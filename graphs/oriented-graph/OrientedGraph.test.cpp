@@ -3,10 +3,10 @@
 //
 
 #include "gtest/gtest.h"
-#include "Graph.hpp"
+#include "OrientedGraph.hpp"
 
-TEST(graph, init) {
-    Graph<int> g;
+TEST(oriented_graph, init) {
+    OrientedGraph<int> g;
     g.addVertex(0);
     g.addVertex(1);
     g.addEdge(0, 1);
@@ -39,4 +39,7 @@ TEST(graph, init) {
 
     EXPECT_EQ(g.verticesSize(), 3);
     EXPECT_EQ(g.edgesSize(), 0);
+
+    g.addEdge(2, 3);
+    EXPECT_THROW(g.addEdge(2, 3), std::logic_error);
 }
