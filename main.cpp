@@ -2,8 +2,11 @@
 #include "AVL/Avl.hpp"
 
 int main() {
-    Avl<int> tree;
-    tree.insertFromVector({8, 30, 62, 61, 70, 3, 40, 92, 11, 7, 5, 6, 91});
+    std::vector<int> list = {1, 2, 3, 5, 2, 5, 2};
+    list.erase(std::remove(list.begin(), list.end(), 2), list.end());
+    for (auto x: list) {
+        std::cout << x << " ";
+    }
 
     return 0;
 }
