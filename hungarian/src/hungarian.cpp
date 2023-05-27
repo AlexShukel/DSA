@@ -3,6 +3,7 @@
 //
 
 #include <iostream>
+#include <limits>
 #include "hungarian.h"
 
 template<class T>

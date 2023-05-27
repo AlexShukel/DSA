@@ -29,4 +29,4 @@ add_executable(DSA main.cpp)
 target_link_libraries(DSA sqrt)
 target_include_directories(DSA PUBLIC sqrt/src)
 
-set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} /Wall")
+set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -Wall")

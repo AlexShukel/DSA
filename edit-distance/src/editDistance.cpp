@@ -5,6 +5,7 @@
 #include "editDistance.h"
 #include <vector>
 #include <stdexcept>
+#include <limits>
 
 size_t editDistance(const std::string &s, const std::string &t, unsigned char variant) {
     const size_t sSize = s.length(), tSize = t.length();
