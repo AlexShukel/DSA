@@ -43,6 +43,8 @@ public:
     TVertex getNeighbour(TVertex vertex, size_t pos) const;
 
     virtual bool hasEdge(TVertex from, TVertex to) const;
+
+    std::vector<TVertex> getVertices() const;
 };
 
 template<class TVertex>
@@ -171,6 +173,17 @@ bool OrientedGraph<TVertex>::hasEdge(TVertex from, TVertex to) const {
 template<class TVertex>
 void OrientedGraph<TVertex>::setEdgesSize(size_t newSize) {
     _edgesSize = newSize;
+}
+
+template<class TVertex>
+std::vector<TVertex> OrientedGraph<TVertex>::getVertices() const {
+    std::vector<TVertex> vertices;
+
+    for (auto &entry: adj) {
+        vertices.push_back(entry.first);
+    }
+
+    return vertices;
 }
 
 #endif //DSA_ORIENTED_GRAPH_H

@@ -23,10 +23,15 @@ add_subdirectory(hungarian)
 add_subdirectory(edit-distance)
 add_subdirectory(hash-table)
 add_subdirectory(graphs)
+add_subdirectory(dijkstra)
 
 add_executable(DSA main.cpp)
 
 target_link_libraries(DSA sqrt)
 target_include_directories(DSA PUBLIC sqrt/src)
 
-set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -Wall")
+if (CMAKE_CXX_COMPILER_ID STREQUAL "MSVC")
+    set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} /Wall")
+else ()
+    set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -Wall")
+endif ()
