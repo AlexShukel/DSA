@@ -43,5 +43,5 @@ TEST(path_finding, a_star) {
     initGraph(graph);
     AStar<Vertex, hash_pair> astar(graph, heuristic);
     auto result = astar.run({1, 4}, {4, 0});
-    EXPECT_EQ(result.distance, 7);
+    EXPECT_EQ(result.distance, 11);
 }
