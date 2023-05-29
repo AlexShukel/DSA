@@ -138,3 +138,6 @@ size_t OrientedGraphImplementation<TWeight>::outDeg(Vertex vertex) const {
 
 template
 class OrientedGraphImplementation<int>;
+
+template
+class OrientedGraphImplementation<double>;

@@ -14,6 +14,7 @@ Dijkstra<TWeight>::Dijkstra(ReadableGraph<TWeight> *graph): graph(graph) {
     distances.resize(size);
     for (size_t i = 0; i < size; ++i) {
         distances[i].resize(size);
+        std::fill(distances[i].begin(), distances[i].end(), INF);
     }
 }
 

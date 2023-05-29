@@ -6,3 +6,6 @@
 
 template
 class ReadableGraph<int>;
+
+template
+class ReadableGraph<double>;

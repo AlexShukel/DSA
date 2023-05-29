@@ -75,3 +75,6 @@ size_t Graph<TWeight>::degree(Vertex vertex) const {
 
 template
 class Graph<int>;
+
+template
+class Graph<double>;

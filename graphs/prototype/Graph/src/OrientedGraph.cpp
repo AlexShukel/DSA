@@ -106,3 +106,6 @@ size_t OrientedGraph<TWeight>::outDeg(Vertex vertex) const {
 
 template
 class OrientedGraph<int>;
+
+template
+class OrientedGraph<double>;
