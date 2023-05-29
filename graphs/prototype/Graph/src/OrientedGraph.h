@@ -7,9 +7,10 @@
 
 #include <vector>
 #include "config.h"
+#include "ReadableGraph.h"
 
 template<class TWeight>
-class OrientedGraph {
+class OrientedGraph : public ReadableGraph<TWeight> {
 private:
     class Implementation;
 
@@ -44,7 +45,7 @@ public:
     size_t getEdgeCount() const;
 
     size_t inDeg(Vertex vertex) const;
-    
+
     size_t outDeg(Vertex vertex) const;
 };
 

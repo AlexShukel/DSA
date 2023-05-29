@@ -1,22 +1,23 @@
 #include <iostream>
-#include <map>
-#include <utility>
-#include "AVL/Avl.hpp"
 
 class A {
-private:
-    std::vector<int> v;
-
 public:
-    explicit A(std::vector<int> v) : v(std::move(v)) {}
+    virtual void hello() const = 0;
 
-    void mutate() {
-        v.push_back(42);
-    }
+    virtual ~A() = default;
 };
 
-int main() {
-    std::cout << sizeof(long double);
+class B : public A {
+public:
+    void hello() const override;
+};
 
+void B::hello() const {
+    std::cout << "hello" << std::endl;
+}
+
+int main() {
+    B b;
+    b.hello();
     return 0;
 }

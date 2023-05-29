@@ -13,21 +13,15 @@ TEST(graph, graph_public) {
         std::fill(matrix[i], matrix[i] + n, 0);
     }
 
-    matrix[0][1] = 1;
-    matrix[1][0] = 1;
-
-    matrix[1][2] = 1;
-    matrix[2][1] = 1;
-
-    matrix[2][3] = 1;
-    matrix[3][2] = 1;
-
-    matrix[3][0] = 1;
-    matrix[0][3] = 1;
-
     Graph<int> graph(matrix, n);
+
+    graph.addEdge(0, 1);
+    graph.addEdge(1, 2);
+    graph.addEdge(2, 3);
+    graph.addEdge(3, 0);
+
     EXPECT_EQ(graph.getEdgeCount(), 4);
-    EXPECT_EQ(graph.degree(0), 3);
+    EXPECT_EQ(graph.degree(0), 2);
 
     for (int i = 0; i < n; ++i) {
         delete[] matrix[i];
