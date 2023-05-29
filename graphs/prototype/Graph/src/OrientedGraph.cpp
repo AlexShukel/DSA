@@ -104,6 +104,5 @@ size_t OrientedGraph<TWeight>::outDeg(Vertex vertex) const {
     return implementation->impl.outDeg(vertex);
 }
 
-// Add more template instantiations for other types of weights
 template
 class OrientedGraph<int>;

@@ -136,6 +136,5 @@ size_t OrientedGraphImplementation<TWeight>::outDeg(Vertex vertex) const {
     return degree;
 }
 
-// Add more template instantiations for other types of weights
 template
 class OrientedGraphImplementation<int>;

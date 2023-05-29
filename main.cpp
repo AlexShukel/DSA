@@ -16,12 +16,7 @@ public:
 };
 
 int main() {
-    std::vector<int> v = {1, 2, 3};
-    A a(v);
-    a.mutate();
-    for (auto x: v) {
-        std::cout << x << " ";
-    }
+    std::cout << sizeof(long double);
 
     return 0;
 }
