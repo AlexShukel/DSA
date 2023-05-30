@@ -6,13 +6,14 @@
 #include "aStar.h"
 #include "OrientedGraph.h"
 #include "unordered_map"
+#include <cmath>
 
 std::unordered_map<Vertex, std::pair<int, int>> coords;
 
 size_t heuristicEuclidean(Vertex from, Vertex to) {
     int dx = coords[from].first - coords[to].second;
     int dy = coords[from].second - coords[to].second;
-    return static_cast<size_t>(sqrt(dx * dx + dy * dy));
+    return static_cast<size_t>(std::sqrt(dx * dx + dy * dy));
 }
 
 TEST(a_star, shortest_path_exists) {
