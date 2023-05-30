@@ -34,7 +34,7 @@ void print_graph(int *graph[], int n) {
     }
 }
 
-bool bsf(int *residual_graph[], int s, int t, int path[], int n) {
+bool bfs(AbstractGraph<int> *residual_graph, int s, int t, int path[], int n) {
     // Initialize queue of vertices
     std::queue<int> q;
     q.push(s);
@@ -53,7 +53,7 @@ bool bsf(int *residual_graph[], int s, int t, int path[], int n) {
 
         for (int i = 0; i < n; ++i) {
             // There is an edge in residual graph
-            if (!visited[i] && residual_graph[current][i] > 0) {
+            if (!visited[i] && residual_graph->hasEdge(current, i)) {
                 // Add current vertex in path
                 path[i] = current;
 
@@ -76,29 +76,29 @@ bool bsf(int *residual_graph[], int s, int t, int path[], int n) {
     return path_exists;
 }
 
-int ford_fulkerson(int *residual_graph[], int *graph[], int s, int t, int n) {
-    // Initialize residual graph
-    for (int i = 0; i < n; ++i) {
-        std::copy(graph[i], graph[i] + n, residual_graph[i]);
-    }
-
+int ford_fulkerson(AbstractGraph<int> *residual_graph, AbstractGraph<int> *graph, int s, int t, int n) {
     int *path = new int[n];
     int max_flow = 0;
 
-    while (bsf(residual_graph, s, t, path, n)) {
+    while (bfs(residual_graph, s, t, path, n)) {
         int current = t;
         int min_residual_capacity = INF;
 
         // Find the minimum residual capacity along augmenting path
         while (current != s) {
-            min_residual_capacity = std::min(min_residual_capacity, residual_graph[path[current]][current]);
+            min_residual_capacity = std::min(min_residual_capacity,
+                                             residual_graph->getEdgeWeight(path[current], current));
             current = path[current];
         }
 
         current = t;
         while (current != s) {
-            residual_graph[path[current]][current] -= min_residual_capacity;
-            residual_graph[current][path[current]] += min_residual_capacity;
+            // Update weights
+            residual_graph->addEdge(path[current], current,
+                                    residual_graph->getEdgeWeight(path[current], current) - min_residual_capacity);
+            residual_graph->addEdge(current, path[current],
+                                    residual_graph->getEdgeWeight(current, path[current]) + min_residual_capacity);
+
             current = path[current];
         }
 
@@ -109,30 +109,32 @@ int ford_fulkerson(int *residual_graph[], int *graph[], int s, int t, int n) {
     return max_flow;
 }
 
-void get_final_flows(int *final_flows[], int *residual_graph[], int *graph[], int n) {
+void get_final_flows(int *final_flows[], AbstractGraph<int> *residual_graph, AbstractGraph<int> *graph, int n) {
     for (int i = 0; i < n; ++i) {
         std::fill(final_flows[i], final_flows[i] + n, 0);
 
         for (int j = 0; j < n; ++j) {
-            if (graph[i][j] > 0) {
-                final_flows[i][j] = graph[i][j] - residual_graph[i][j];
+            if (graph->hasEdge(i, j)) {
+                final_flows[i][j] = graph->getEdgeWeight(i, j) - residual_graph->getEdgeWeight(i, j);
             }
         }
     }
 }
 
-void dfs(int src, bool *visited, int *graph[], int n, std::set<int> &source_side) {
+void dfs(int src, bool *visited, AbstractGraph<int> *graph, int n, std::set<int> &source_side) {
     source_side.insert(src);
     visited[src] = true;
 
     for (int i = 0; i < n; ++i) {
-        if (graph[src][i] > 0 && !visited[i]) {
+        if (graph->hasEdge(src, i) && !visited[i]) {
             dfs(i, visited, graph, n, source_side);
         }
     }
 }
 
-void get_min_cut(std::vector<std::pair<int, int>> &min_cut, int *residual_graph[], int *graph[], int s, int n) {
+void
+get_min_cut(std::vector<std::pair<int, int>> &min_cut, AbstractGraph<int> *residual_graph, AbstractGraph<int> *graph,
+            int s, int n) {
     std::set<int> source_side;
 
     bool *visited = new bool[n];
@@ -140,7 +142,7 @@ void get_min_cut(std::vector<std::pair<int, int>> &min_cut, int *residual_graph[
 
     for (int i = 0; i < n; ++i) {
         for (int j = 0; j < n; ++j) {
-            if (graph[i][j] > 0 && source_side.find(i) != source_side.end() &&
+            if (graph->hasEdge(i, j) && source_side.find(i) != source_side.end() &&
                 source_side.find(j) == source_side.end()) {
                 min_cut.emplace_back(i, j);
             }

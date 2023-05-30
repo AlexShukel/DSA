@@ -7,10 +7,10 @@
 
 #include <vector>
 #include "config.h"
-#include "ReadableGraph.h"
+#include "AbstractGraph.h"
 
 template<class TWeight>
-class OrientedGraph : public ReadableGraph<TWeight> {
+class OrientedGraph : public AbstractGraph<TWeight> {
 private:
     class Implementation;
 

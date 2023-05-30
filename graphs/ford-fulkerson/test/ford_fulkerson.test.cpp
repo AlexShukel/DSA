@@ -4,10 +4,11 @@
 
 #include "gtest/gtest.h"
 #include "ford_fulkerson.h"
+#include "OrientedGraph.h"
 
 TEST(max_flow, ford_fulkerson_example_1) {
     const int n = 6;
-    int **graph = alloc_2d_array(n);
+    int **graph_matrix = alloc_2d_array(n);
 
     // The example taken from https://www.geeksforgeeks.org/ford-fulkerson-algorithm-for-maximum-flow-problem/
     int static_graph[n][n]
@@ -19,20 +20,20 @@ TEST(max_flow, ford_fulkerson_example_1) {
                {0, 0,  0,  0,  0,  0}};
 
     for (int i = 0; i < n; ++i) {
-        std::copy(static_graph[i], static_graph[i] + n, graph[i]);
+        std::copy(static_graph[i], static_graph[i] + n, graph_matrix[i]);
     }
 
-    int **flows = alloc_2d_array(n);
+    OrientedGraph<int> graph(graph_matrix, n);
+    OrientedGraph<int> residual_graph(graph);
 
-    EXPECT_EQ(ford_fulkerson(flows, graph, 0, 5, n), 23);
+    EXPECT_EQ(ford_fulkerson(&residual_graph, &graph, 0, 5, n), 23);
 
-    free_2d_array(flows, n);
-    free_2d_array(graph, n);
+    free_2d_array(graph_matrix, n);
 }
 
 TEST(max_flow, ford_fulkerson_example_2) {
     const int n = 11;
-    int **graph = alloc_2d_array(n);
+    int **graph_matrix = alloc_2d_array(n);
 
     // The example DIRBTUVES
     int static_graph[n][n]
@@ -52,27 +53,27 @@ TEST(max_flow, ford_fulkerson_example_2) {
             };
 
     for (int i = 0; i < n; ++i) {
-        std::copy(static_graph[i], static_graph[i] + n, graph[i]);
+        std::copy(static_graph[i], static_graph[i] + n, graph_matrix[i]);
     }
 
-    int **residual_graph = alloc_2d_array(n);
+    OrientedGraph<int> graph(graph_matrix, n);
+    OrientedGraph<int> residual_graph(graph);
 
-    EXPECT_EQ(ford_fulkerson(residual_graph, graph, 0, 10, n), 65);
+    EXPECT_EQ(ford_fulkerson(&residual_graph, &graph, 0, 10, n), 65);
 
     int **final_flows = alloc_2d_array(n);
-    get_final_flows(final_flows, residual_graph, graph, n);
+    get_final_flows(final_flows, &residual_graph, &graph, n);
     print_graph(final_flows, n);
     std::cout << std::endl;
 
     std::cout << "Min-cut edges are:" << std::endl;
     std::vector<std::pair<int, int>> min_cut;
-    get_min_cut(min_cut, residual_graph, graph, 0, n);
+    get_min_cut(min_cut, &residual_graph, &graph, 0, n);
     for (auto &edge: min_cut) {
         std::cout << "(" << edge.first << ", " << edge.second << ")" << std::endl;
     }
     std::cout << std::endl;
 
     free_2d_array(final_flows, n);
-    free_2d_array(residual_graph, n);
-    free_2d_array(graph, n);
+    free_2d_array(graph_matrix, n);
 }

@@ -6,10 +6,10 @@
 #define DSA_GRAPH_H
 
 #include "OrientedGraph.h"
-#include "ReadableGraph.h"
+#include "AbstractGraph.h"
 
 template<class TWeight>
-class Graph : public ReadableGraph<TWeight> {
+class Graph : public AbstractGraph<TWeight> {
 private:
     OrientedGraph<TWeight> orientedGraph;
 
