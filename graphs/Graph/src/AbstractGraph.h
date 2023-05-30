@@ -5,6 +5,7 @@
 #ifndef DSA_ABSTRACTGRAPH_H
 #define DSA_ABSTRACTGRAPH_H
 
+#include "config.h"
 #include "ReadableGraph.h"
 
 template<class TWeight>
