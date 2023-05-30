@@ -26,7 +26,7 @@ size_t aStar(std::vector<Vertex> &path, ReadableGraph<TWeight> *graph,
     // For vertex n, cameFrom[n] is previous vertex in the shortest path from start to n
     std::vector<Vertex> cameFrom(size, NULL_VERTEX);
 
-    std::priority_queue<Vertex, std::vector<Vertex>, std::greater<>> queue;
+    std::priority_queue<Vertex, std::vector<Vertex>, std::greater<Vertex>> queue;
     queue.push(from);
 
     std::vector<bool> inQueue(size, false);

@@ -24,7 +24,7 @@ void Dijkstra<TWeight>::run(Vertex vertex) {
     std::fill(dists.begin(), dists.end(), INF);
     dists[vertex] = 0;
 
-    std::priority_queue<Vertex, std::vector<Vertex>, std::greater<>> queue;
+    std::priority_queue<Vertex, std::vector<Vertex>, std::greater<Vertex>> queue;
     queue.push(vertex);
 
     while (!queue.empty()) {
