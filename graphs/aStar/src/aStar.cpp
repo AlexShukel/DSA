@@ -5,6 +5,7 @@
 #include "aStar.h"
 #include <limits>
 #include <queue>
+#include <algorithm>
 
 #define INF std::numeric_limits<size_t>::max()
 #define NULL_VERTEX std::numeric_limits<Vertex>::max()
