@@ -34,7 +34,7 @@ public:
 
     size_t getNeighborCount(Vertex vertex) const;
 
-    void getNeighbors(std::vector<Vertex> &neighbors, Vertex vertex) const;
+    virtual void getNeighbors(std::vector<Vertex> &neighbors, Vertex vertex) const;
 
     size_t getVertexCount() const;
 
