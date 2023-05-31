@@ -17,7 +17,7 @@ public:
     };
 };
 
-TEST(np_complete, hamiltonian_cycle) {
+TEST(np_complete, hamiltonian_cycle_path_exists) {
 //    (0)--(1)--(2)
 //    |   / \   |
 //    |  /   \  |
@@ -27,6 +27,7 @@ TEST(np_complete, hamiltonian_cycle) {
     int **matrix = new int *[n];
     for (int i = 0; i < n; ++i) {
         matrix[i] = new int[n];
+        std::fill(matrix[i], matrix[i] + n, 0);
     }
 
     SortedNeighborsGraph graph(matrix, n);
@@ -40,6 +41,36 @@ TEST(np_complete, hamiltonian_cycle) {
 
     std::vector<Vertex> path;
     EXPECT_EQ(hamiltonian_cycle(path, &graph, 0), true);
+
+    for (int i = 0; i < n; ++i) {
+        delete[] matrix[i];
+    }
+    delete[] matrix;
+}
+
+TEST(np_complete, hamiltonian_cycle_path_not_exists) {
+//    (0)--(1)--(2)
+//    |   / \   |
+//    |  /   \  |
+//    | /     \ |
+//    (3)      (4)
+    const int n = 5;
+    int **matrix = new int *[n];
+    for (int i = 0; i < n; ++i) {
+        matrix[i] = new int[n];
+        std::fill(matrix[i], matrix[i] + n, 0);
+    }
+
+    SortedNeighborsGraph graph(matrix, n);
+    graph.addEdge(0, 1);
+    graph.addEdge(0, 3);
+    graph.addEdge(1, 2);
+    graph.addEdge(1, 3);
+    graph.addEdge(1, 4);
+    graph.addEdge(2, 4);
+
+    std::vector<Vertex> path;
+    EXPECT_EQ(hamiltonian_cycle(path, &graph, 0), false);
 
     for (int i = 0; i < n; ++i) {
         delete[] matrix[i];
