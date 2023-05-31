@@ -5,6 +5,7 @@
 #include "hamiltonian_cycle.h"
 #include <algorithm>
 #include <limits>
+#include <iostream>
 
 #define NULL_VERTEX std::numeric_limits<Vertex>::max()
 
@@ -36,8 +37,12 @@ bool construct_hamiltonian_cycle(std::vector<Vertex> &path, AbstractGraph<int> *
 
 bool hamiltonian_cycle(std::vector<Vertex> &path, AbstractGraph<int> *graph, Vertex start) {
     size_t size = graph->getVertexCount();
-    path.resize(size, NULL_VERTEX);
 
+    if (size == 0) {
+        return false;
+    }
+
+    path.resize(size, NULL_VERTEX);
     path[0] = start;
 
     return construct_hamiltonian_cycle(path, graph, 1);

@@ -77,3 +77,34 @@ TEST(np_complete, hamiltonian_cycle_path_not_exists) {
     }
     delete[] matrix;
 }
+
+TEST(np_complete, hamiltonian_cycle_empty_graph) {
+    const int n = 0;
+    SortedNeighborsGraph graph(nullptr, n);
+
+    std::vector<Vertex> path;
+    EXPECT_EQ(hamiltonian_cycle(path, &graph, 0), false);
+}
+
+TEST(np_complete, hamiltonian_cycle_graph_as_star) {
+    const int n = 5;
+    int **matrix = new int *[n];
+    for (int i = 0; i < n; ++i) {
+        matrix[i] = new int[n];
+        std::fill(matrix[i], matrix[i] + n, 0);
+    }
+
+    SortedNeighborsGraph graph(matrix, n);
+    graph.addEdge(1, 0);
+    graph.addEdge(2, 0);
+    graph.addEdge(3, 0);
+    graph.addEdge(4, 0);
+
+    std::vector<Vertex> path;
+    EXPECT_EQ(hamiltonian_cycle(path, &graph, 0), false);
+
+    for (int i = 0; i < n; ++i) {
+        delete[] matrix[i];
+    }
+    delete[] matrix;
+}
