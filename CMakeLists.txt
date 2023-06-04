@@ -23,6 +23,7 @@ add_subdirectory(hungarian)
 add_subdirectory(edit-distance)
 add_subdirectory(hash-table)
 add_subdirectory(graphs)
+add_subdirectory(data-structures)
 
 add_executable(DSA main.cpp)
 
