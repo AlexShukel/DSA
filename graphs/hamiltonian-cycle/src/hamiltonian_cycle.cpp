@@ -5,7 +5,6 @@
 #include "hamiltonian_cycle.h"
 #include <algorithm>
 #include <limits>
-#include <iostream>
 
 #define NULL_VERTEX std::numeric_limits<Vertex>::max()
 
