@@ -7,6 +7,15 @@
 #include "hamiltonian_cycle.h"
 #include <algorithm>
 
+template<class T>
+void expectVectorsEquality(const std::vector<T> &a, const std::vector<T> &b) {
+    ASSERT_EQ(a.size(), b.size());
+
+    for (int i = 0; i < a.size(); ++i) {
+        EXPECT_EQ(a[i], b[i]);
+    }
+}
+
 class SortedNeighborsGraph : public Graph<int> {
 public:
     SortedNeighborsGraph(int **matrix, size_t size) : Graph<int>(matrix, size) {};
@@ -41,6 +50,7 @@ TEST(np_complete, hamiltonian_cycle_path_exists) {
 
     std::vector<Vertex> path;
     EXPECT_EQ(hamiltonian_cycle(path, &graph, 0), true);
+    expectVectorsEquality(path, {0, 3, 4, 2, 1});
 
     for (int i = 0; i < n; ++i) {
         delete[] matrix[i];
@@ -71,6 +81,7 @@ TEST(np_complete, hamiltonian_cycle_path_not_exists) {
 
     std::vector<Vertex> path;
     EXPECT_EQ(hamiltonian_cycle(path, &graph, 0), false);
+    expectVectorsEquality(path, {});
 
     for (int i = 0; i < n; ++i) {
         delete[] matrix[i];
@@ -84,6 +95,7 @@ TEST(np_complete, hamiltonian_cycle_empty_graph) {
 
     std::vector<Vertex> path;
     EXPECT_EQ(hamiltonian_cycle(path, &graph, 0), false);
+    expectVectorsEquality(path, {});
 }
 
 TEST(np_complete, hamiltonian_cycle_graph_as_star) {
@@ -102,6 +114,27 @@ TEST(np_complete, hamiltonian_cycle_graph_as_star) {
 
     std::vector<Vertex> path;
     EXPECT_EQ(hamiltonian_cycle(path, &graph, 0), false);
+    expectVectorsEquality(path, {});
+
+    for (int i = 0; i < n; ++i) {
+        delete[] matrix[i];
+    }
+    delete[] matrix;
+}
+
+TEST(np_complete, hamiltonian_cycle_not_connected_graph) {
+    const int n = 1;
+    int **matrix = new int *[n];
+    for (int i = 0; i < n; ++i) {
+        matrix[i] = new int[n];
+        std::fill(matrix[i], matrix[i] + n, 0);
+    }
+
+    SortedNeighborsGraph graph(matrix, n);
+
+    std::vector<Vertex> path;
+    EXPECT_EQ(hamiltonian_cycle(path, &graph, 0), false);
+    expectVectorsEquality(path, {});
 
     for (int i = 0; i < n; ++i) {
         delete[] matrix[i];

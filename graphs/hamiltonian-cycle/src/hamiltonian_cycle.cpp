@@ -45,5 +45,11 @@ bool hamiltonian_cycle(std::vector<Vertex> &path, AbstractGraph<int> *graph, Ver
     path.resize(size, NULL_VERTEX);
     path[0] = start;
 
-    return construct_hamiltonian_cycle(path, graph, 1);
+    bool result = construct_hamiltonian_cycle(path, graph, 1);
+
+    if (!result) {
+        path.clear();
+    }
+
+    return result;
 }
