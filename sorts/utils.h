@@ -5,7 +5,7 @@
 #ifndef DSA_UTILS_H
 #define DSA_UTILS_H
 
-#include "gtest/gtest.h"
+#include <vector>
 
 void expectVectorToBeSorted(const std::vector<int> &arr);
 

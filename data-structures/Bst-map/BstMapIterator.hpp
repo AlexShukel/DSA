@@ -31,6 +31,10 @@ public:
 
 template<class K, class T>
 BstMapIterator<K, T>::BstMapIterator(Node<K, T> *root, TraverseOrder order) {
+    if (!root) {
+        return;
+    }
+
     switch (order) {
         // LVD (left, vertex, right)
         case INORDER: {

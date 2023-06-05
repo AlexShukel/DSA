@@ -37,20 +37,8 @@ Node<K, T> *BstMap<K, T>::insert(const K &key, const T &value) {
 
     while (node) {
         if (node->key == key) {
-            auto newNode = new Node<K, T>(value, node);
-
-            if (node->parent) {
-                if (node->parent->left == node) {
-                    node->parent->left = newNode;
-                } else {
-                    node->parent->right = newNode;
-                }
-            } else {
-                root = newNode;
-            }
-
-            delete node;
-            return newNode;
+            node->value = value;
+            return node;
         }
 
         parent = node;
