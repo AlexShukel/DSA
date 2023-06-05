@@ -133,3 +133,64 @@ TEST(np_complete, hamiltonian_cycle_not_connected_graph) {
     }
     delete[] matrix;
 }
+
+void generateFullyConnectedGraph(int **matrix, int n) {
+    for (int i = 0; i < n; ++i) {
+        for (int j = 0; j < n; ++j) {
+            if (i != j) {
+                matrix[i][j] = 1;
+            }
+        }
+    }
+}
+
+TEST(np_complete, hamiltonian_cycle_fully_connected_graph) {
+    std::vector<int> sizes = {10, 50, 100, 500};
+
+    for (auto n: sizes) {
+        int **matrix = new int *[n];
+        for (int i = 0; i < n; ++i) {
+            matrix[i] = new int[n];
+            std::fill(matrix[i], matrix[i] + n, 0);
+        }
+
+        generateFullyConnectedGraph(matrix, n);
+        SortedNeighborsGraph graph(matrix, n);
+
+        std::vector<Vertex> path;
+        EXPECT_EQ(hamiltonian_cycle(path, &graph, 0), true);
+
+        for (int i = 0; i < n; ++i) {
+            delete[] matrix[i];
+        }
+        delete[] matrix;
+    }
+}
+
+TEST(np_complete, hamiltonian_cycle_cyclic_graph_with_one_extra_vertex) {
+    const int n = 5;
+    int **matrix = new int *[n];
+    for (int i = 0; i < n; ++i) {
+        matrix[i] = new int[n];
+        std::fill(matrix[i], matrix[i] + n, 0);
+    }
+
+    SortedNeighborsGraph graph(matrix, n);
+    graph.addEdge(0, 1);
+    graph.addEdge(1, 2);
+    graph.addEdge(2, 3);
+    graph.addEdge(3, 0);
+    graph.addEdge(0, 4);
+    graph.addEdge(4, 1);
+
+    std::vector<Vertex> path;
+    EXPECT_EQ(hamiltonian_cycle(path, &graph, 0), true);
+    expectVectorsEquality(path, {0, 4, 1, 2, 3});
+
+    for (int i = 0; i < n; ++i) {
+        delete[] matrix[i];
+    }
+    delete[] matrix;
+}
+
+
