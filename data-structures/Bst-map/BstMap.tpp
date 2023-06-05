@@ -14,20 +14,13 @@ BstMap<K, T>::BstMap(): root(nullptr), _size(0) {}
 
 template<class K, class T>
 BstMap<K, T>::~BstMap() {
-    std::queue<Node<K, T> *> q;
-    q.push(root);
+    if (root) {
+        auto it = getIterator(INORDER);
 
-    while (!q.empty()) {
-        auto current = q.front();
-        q.pop();
-
-        if (!current) {
-            continue;
+        while (it.hasNext()) {
+            delete it.getNode();
+            ++it;
         }
-
-        q.push(current->left);
-        q.push(current->right);
-        delete current;
     }
 }
 
@@ -81,15 +74,15 @@ Node<K, T> *BstMap<K, T>::insert(const K &key, const T &value) {
 }
 
 template<class K, class T>
-void BstMap<K, T>::remove(const K &key) {
+Node<K, T> *BstMap<K, T>::remove(const K &key) {
     Node<K, T> *node = findNode(key);
 
     if (!node) {
-        return;
+        return nullptr;
     }
 
     --_size;
-    removeImplementation(node);
+    return removeImplementation(node);
 }
 
 template<class K, class T>
@@ -184,6 +177,21 @@ Node<K, T> *BstMap<K, T>::removeImplementation(Node<K, T> *node) {
     node->key = temp->key;
     node->value = temp->value;
     return removeImplementation(temp);
+}
+
+template<class K, class T>
+void BstMap<K, T>::setRoot(Node<K, T> *newRoot) {
+    root = newRoot;
+}
+
+template<class K, class T>
+BstMapIterator<K, T> BstMap<K, T>::getIterator(TraverseOrder order) const {
+    return BstMapIterator<K, T>(root, order);
+}
+
+template<class K, class T>
+Node<K, T> *BstMap<K, T>::getRoot() {
+    return root;
 }
 
 #endif //DSA_BSTMAP_TPP
