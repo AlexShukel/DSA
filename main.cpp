@@ -1,12 +1,43 @@
 #include <iostream>
 #include <vector>
+#include <set>
+
+using namespace std;
+
+class Data {
+public:
+    Data() {
+        cout << "Create data\n";
+    }
+
+    Data(const Data &other) {
+        cout << "Copy data\n";
+    }
+
+    Data &operator=(const Data &other) {
+        cout << "Assignment operator call\n";
+        return *this;
+    }
+
+    bool operator<(const Data &other) const {
+        return false;
+    }
+};
+
+struct Node {
+    const Data &field;
+
+    explicit Node(const Data &data) : field(data) {}
+};
 
 int main() {
-    std::vector<int> v = {1, 2, 3, 4, 5};
-    auto it = v.begin() + 2;
-    v.erase(it + 1, v.end());
-    for (auto x: v) {
-        std::cout << x << " ";
-    }
+    Data d;
+
+    set<Data> set;
+    set.insert(d);
+
+//    a = 3;
+//    auto it = set.find(5);
+//    cout << *it;
     return 0;
 }

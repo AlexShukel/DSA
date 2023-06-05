@@ -10,6 +10,8 @@
 TEST(trees, bst_map) {
     BstMap<int, int> map;
 
+    map.remove(0);
+
     map.insert(5, 5);
 
     EXPECT_EQ(map.size(), 1);
@@ -66,4 +68,34 @@ TEST(trees, bst_map) {
     EXPECT_EQ(map.has(2), true);
     EXPECT_EQ(map.has(3), true);
     EXPECT_EQ(map.has(4), true);
+}
+
+TEST(trees, bst_empty_map_destructor) {
+    BstMap<int, int> map;
+    EXPECT_EQ(map.size(), 0);
+}
+
+class Data {
+public:
+    int integerField;
+    double doubleField;
+
+    Data(int integerField, double doubleField) : integerField(integerField), doubleField(doubleField) {}
+};
+
+TEST(trees, bst_map_with_objects) {
+    Data d(42, 1.0);
+
+    BstMap<int, Data> map;
+
+    map.insert(0, d);
+
+    EXPECT_EQ(map.has(0), true);
+    EXPECT_EQ(map.get(0)->integerField, 42);
+    EXPECT_EQ(map.get(0)->doubleField, 1.0);
+
+    d.integerField = 21;
+
+    // Copy of an object should be stored in tree
+    EXPECT_EQ(map.get(0)->integerField, 42);
 }

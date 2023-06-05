@@ -17,6 +17,8 @@ public:
 
     Node(const K &key, const T &value, Node *parent);
 
+    Node(const T &value, Node *other);
+
     bool isLeaf() const;
 
     int getBalanceFactor() const;

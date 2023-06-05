@@ -6,10 +6,30 @@
 #define DSA_BSTMAP_TPP
 
 #include <iostream>
+#include <queue>
 #include "BstMap.hpp"
 
 template<class K, class T>
 BstMap<K, T>::BstMap(): root(nullptr), _size(0) {}
+
+template<class K, class T>
+BstMap<K, T>::~BstMap() {
+    std::queue<Node<K, T> *> q;
+    q.push(root);
+
+    while (!q.empty()) {
+        auto current = q.front();
+        q.pop();
+
+        if (!current) {
+            continue;
+        }
+
+        q.push(current->left);
+        q.push(current->right);
+        delete current;
+    }
+}
 
 template<class K, class T>
 Node<K, T> *BstMap<K, T>::insert(const K &key, const T &value) {
@@ -24,8 +44,20 @@ Node<K, T> *BstMap<K, T>::insert(const K &key, const T &value) {
 
     while (node) {
         if (node->key == key) {
-            node->value = value;
-            return node;
+            auto newNode = new Node<K, T>(value, node);
+
+            if (node->parent) {
+                if (node->parent->left == node) {
+                    node->parent->left = newNode;
+                } else {
+                    node->parent->right = newNode;
+                }
+            } else {
+                root = newNode;
+            }
+
+            delete node;
+            return newNode;
         }
 
         parent = node;

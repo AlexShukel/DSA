@@ -22,6 +22,8 @@ private:
 public:
     explicit BstMap();
 
+    ~BstMap();
+
     virtual Node<K, T> *insert(const K &key, const T &value);
 
     virtual void remove(const K &key);
