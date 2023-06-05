@@ -5,7 +5,7 @@
 #include "gtest/gtest.h"
 #include "greedy_hamiltonian_cycle.h"
 #include "Graph.h"
-#include "testUtils.h"
+#include "utils.h"
 
 TEST(np_complete, greedy_hamiltonian_cycle_path_exists) {
 //    (0)--(1)--(2)

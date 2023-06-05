@@ -5,7 +5,7 @@
 #include "gtest/gtest.h"
 #include "Graph.h"
 #include "hamiltonian_cycle.h"
-#include "testUtils.h"
+#include "utils.h"
 #include <algorithm>
 
 class SortedNeighborsGraph : public Graph<int> {
