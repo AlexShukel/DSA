@@ -31,13 +31,7 @@ struct Node {
 };
 
 int main() {
-    Data d;
-
-    set<Data> set;
-    set.insert(d);
-
-//    a = 3;
-//    auto it = set.find(5);
-//    cout << *it;
+    vector<int> v(10);
+    cout << v.size();
     return 0;
 }
