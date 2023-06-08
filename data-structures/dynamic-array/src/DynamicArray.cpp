@@ -8,14 +8,14 @@
 #include <stdexcept>
 
 template<class T>
-DynamicArray<T>::DynamicArray(): arr(nullptr), _size(0), capacity(0) {}
+DynamicArray<T>::DynamicArray(): arr(nullptr), _size(0), _capacity(0) {}
 
 template<class T>
-DynamicArray<T>::DynamicArray(size_t size): arr((T *) malloc(size * sizeof(T))), _size(size), capacity(size) {}
+DynamicArray<T>::DynamicArray(size_t size): arr((T *) malloc(size * sizeof(T))), _size(size), _capacity(size) {}
 
 template<class T>
 DynamicArray<T>::DynamicArray(size_t size, T fillValue): arr((T *) malloc(size * sizeof(T))), _size(size),
-                                                         capacity(size) {
+                                                         _capacity(size) {
     std::fill(arr, arr + size, fillValue);
 }
 
@@ -41,9 +41,9 @@ void DynamicArray<T>::insert(size_t index, T value) {
         throw std::out_of_range("ERROR: index out of range");
     }
 
-    if (_size > capacity) {
-        capacity = std::max((size_t) 2, capacity * 2);
-        arr = (T *) realloc(arr, capacity * sizeof(T));
+    if (_size > _capacity) {
+        _capacity = std::max((size_t) 2, _capacity * 2);
+        arr = (T *) realloc(arr, _capacity * sizeof(T));
     }
 
     for (size_t i = _size - 1; i > index; --i) {
@@ -63,9 +63,9 @@ void DynamicArray<T>::remove(size_t index) {
         arr[i] = arr[i + 1];
     }
 
-    if (_size <= capacity / 2) {
-        capacity /= 2;
-        arr = (T *) realloc(arr, capacity * sizeof(T));
+    if (_size <= _capacity / 2) {
+        _capacity /= 2;
+        arr = (T *) realloc(arr, _capacity * sizeof(T));
     }
 }
 
@@ -92,17 +92,22 @@ size_t DynamicArray<T>::size() const {
 }
 
 template<class T>
+size_t DynamicArray<T>::capacity() const {
+    return _capacity;
+}
+
+template<class T>
 void DynamicArray<T>::clear() {
     free(arr);
     _size = 0;
-    capacity = 0;
+    _capacity = 0;
 }
 
 template<class T>
 void DynamicArray<T>::resize(size_t newSize) {
     arr = (T *) realloc(arr, newSize * sizeof(T));
     _size = newSize;
-    capacity = newSize;
+    _capacity = newSize;
 }
 
 template<class T>

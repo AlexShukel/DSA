@@ -12,7 +12,7 @@ class DynamicArray {
 private:
     T *arr;
     size_t _size;
-    size_t capacity;
+    size_t _capacity;
 
 public:
     DynamicArray();
@@ -36,6 +36,8 @@ public:
     T *end();
 
     size_t size() const;
+
+    size_t capacity() const;
 
     void clear();
 

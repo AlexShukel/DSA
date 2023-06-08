@@ -32,7 +32,9 @@ public:
 
     void remove(size_t index);
 
-    size_t size();
+    size_t size() const;
+
+    size_t capacity() const;
 
     void clear();
 };
