@@ -69,5 +69,24 @@ TEST(midlar, benchmark_comparison) {
 TEST(midlar, stress_test) {
     Midlar<int> midlar;
 
-    generateRandomArray(1000);
+    auto test = generateRandomArray(1000);
+
+    for (auto x: test) {
+        midlar.insert(midlar.size() / 2, x);
+    }
+
+    for (auto x: test) {
+        bool found = false;
+
+        for (size_t i = 0; i < midlar.size(); ++i) {
+            if (midlar[i] == x) {
+                found = true;
+                break;
+            }
+        }
+
+        if (!found) {
+            ASSERT_TRUE(false) << "The element " << x << " not found!";
+        }
+    }
 }

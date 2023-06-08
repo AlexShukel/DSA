@@ -77,16 +77,6 @@ void Midlar<T>::remove(size_t index) {
 }
 
 template<class T>
-T *Midlar<T>::begin() {
-    return nullptr;
-}
-
-template<class T>
-T *Midlar<T>::end() {
-    return nullptr;
-}
-
-template<class T>
 size_t Midlar<T>::size() {
     return left.size() + right.size();
 }

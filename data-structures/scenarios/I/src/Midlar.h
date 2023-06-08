@@ -32,10 +32,6 @@ public:
 
     void remove(size_t index);
 
-    T *begin();
-
-    T *end();
-
     size_t size();
 
     void clear();
