@@ -42,7 +42,7 @@ public:
 };
 
 template<class Container>
-long long measureFirstScenario(Container &arr, int n) {
+long long measureFirstScenario(Container &arr, size_t n) {
     auto test = generateRandomArray(n);
     auto begin = std::chrono::high_resolution_clock::now();
 
@@ -55,12 +55,12 @@ long long measureFirstScenario(Container &arr, int n) {
 }
 
 TEST(midlar, benchmark_comparison) {
-    for (int i = 100; i <= 1e5; i *= 10) {
+    for (size_t i = 100; i <= 1e5; i *= 10) {
         Midlar<int> midlar;
-        auto midlarTime = measureFirstScenario(midlar, 100);
+        auto midlarTime = measureFirstScenario(midlar, i);
 
         VectorAdapter vector;
-        auto vectorTime = measureFirstScenario(vector, 100);
+        auto vectorTime = measureFirstScenario(vector, i);
 
         EXPECT_LT(midlarTime, vectorTime);
     }

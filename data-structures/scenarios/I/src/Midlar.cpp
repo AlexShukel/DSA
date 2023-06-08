@@ -7,6 +7,8 @@
 #include <algorithm>
 #include <stdexcept>
 
+#define REBALANCE_THRESHOLD 1000
+
 template<class T>
 Midlar<T>::Midlar() = default;
 
@@ -96,7 +98,7 @@ bool Midlar<T>::shouldRebalance() const {
     size_t max = std::max(left.size(), right.size());
     size_t min = std::min(left.size(), right.size());
 
-    return max >= 4 && max / 2 > min;
+    return max >= 4 && (max / 2 > min || max - min > REBALANCE_THRESHOLD);
 }
 
 template<class T>
@@ -107,11 +109,17 @@ void Midlar<T>::rebalance() {
     size_t diff = bigger.size() - smaller.size();
     size_t movedSize = diff / 2;
 
-    size_t size = bigger.size();
-    for (size_t i = size - 1; i >= size - movedSize; --i) {
-        smaller.pushBack(bigger[i]);
-        bigger.popBack();
+    size_t oldSmallerSize = smaller.size();
+    size_t newSmallerSize = oldSmallerSize + movedSize;
+    smaller.resize(newSmallerSize);
+
+    size_t biggerSize = bigger.size();
+
+    for (size_t i = oldSmallerSize; i < newSmallerSize; ++i) {
+        smaller[i] = bigger[biggerSize - 1 - (i - oldSmallerSize)];
     }
+
+    bigger.resize(biggerSize - movedSize);
 }
 
 template<class T>
