@@ -27,7 +27,7 @@ DynamicArray<T>::~DynamicArray() {
 template<class T>
 T &DynamicArray<T>::operator[](size_t index) {
     if (index >= _size) {
-        throw std::out_of_range("ERROR: index out of range\n");
+        throw std::out_of_range("ERROR: index out of range");
     }
 
     return arr[index];
@@ -38,7 +38,7 @@ void DynamicArray<T>::insert(size_t index, T value) {
     ++_size;
     if (index >= _size) {
         --_size;
-        throw std::out_of_range("ERROR: index out of range\n");
+        throw std::out_of_range("ERROR: index out of range");
     }
 
     if (_size > capacity) {
@@ -55,7 +55,7 @@ void DynamicArray<T>::insert(size_t index, T value) {
 template<class T>
 void DynamicArray<T>::remove(size_t index) {
     if (index >= _size) {
-        throw std::out_of_range("ERROR: index out of range\n");
+        throw std::out_of_range("ERROR: index out of range");
     }
 
     --_size;
@@ -87,7 +87,7 @@ T *DynamicArray<T>::end() {
 }
 
 template<class T>
-size_t DynamicArray<T>::size() {
+size_t DynamicArray<T>::size() const {
     return _size;
 }
 

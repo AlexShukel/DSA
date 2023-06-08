@@ -14,6 +14,10 @@ bool compare(const int &a, const int &b);
 
 std::vector<std::vector<int>> getTestsData();
 
+std::vector<int> generateRandomArray(size_t size);
+
+std::vector<int> generateUniformDistributionArray(size_t size);
+
 template<class T>
 void expectVectorsEquality(const std::vector<T> &a, const std::vector<T> &b) {
     ASSERT_EQ(a.size(), b.size());
