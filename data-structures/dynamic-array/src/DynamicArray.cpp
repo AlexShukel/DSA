@@ -127,3 +127,6 @@ T &DynamicArray<T>::back() {
 
 template
 class DynamicArray<int>;
+
+template
+class DynamicArray<bool>;
