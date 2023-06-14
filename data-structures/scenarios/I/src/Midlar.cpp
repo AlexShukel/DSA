@@ -84,8 +84,8 @@ size_t Midlar<T>::size() const {
 }
 
 template<class T>
-size_t Midlar<T>::capacity() const {
-    return left.capacity() + right.capacity();
+size_t Midlar<T>::maxSize() const {
+    return left.maxSize() + right.maxSize();
 }
 
 template<class T>

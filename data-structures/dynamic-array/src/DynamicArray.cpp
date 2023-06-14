@@ -6,6 +6,7 @@
 #include <cstdlib>
 #include <algorithm>
 #include <stdexcept>
+#include <limits>
 
 template<class T>
 DynamicArray<T>::DynamicArray(): arr(nullptr), _size(0), _capacity(0) {}
@@ -92,8 +93,8 @@ size_t DynamicArray<T>::size() const {
 }
 
 template<class T>
-size_t DynamicArray<T>::capacity() const {
-    return _capacity;
+size_t DynamicArray<T>::maxSize() const {
+    return std::numeric_limits<size_t>::max();
 }
 
 template<class T>

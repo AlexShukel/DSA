@@ -6,6 +6,8 @@
 #include "Midlar.h"
 #include "utils.h"
 #include <chrono>
+#include <random>
+#include <map>
 
 TEST(midlar, basic) {
     Midlar<int> arr;
@@ -69,24 +71,55 @@ TEST(midlar, benchmark_comparison) {
 TEST(midlar, stress_test) {
     Midlar<int> midlar;
 
-    auto test = generateRandomArray(1000);
+    const int n = 1000;
+    auto test = generateRandomArray(n);
 
+    std::random_device rd;
+    std::mt19937 gen(rd());
+    std::uniform_int_distribution<> distr(0, n - 1);
+
+    // Insert random indexes
     for (auto x: test) {
-        midlar.insert(midlar.size() / 2, x);
+        size_t size = midlar.size();
+        auto idx = size == 0 ? 0 : distr(gen) % size;
+        midlar.insert(idx, x);
     }
 
-    for (auto x: test) {
-        bool found = false;
+    std::map<int, int> frequency;
 
-        for (size_t i = 0; i < midlar.size(); ++i) {
-            if (midlar[i] == x) {
-                found = true;
-                break;
+    for (int i = 0; i < n; ++i) {
+        int originalCount = 0;
+        int resultCount = 0;
+        for (int j = 0; j < n; ++j) {
+            if (test[j] == test[i]) {
+                ++originalCount;
+            }
+
+            if (midlar[j] == test[i]) {
+                ++resultCount;
             }
         }
 
-        if (!found) {
-            ASSERT_TRUE(false) << "The element " << x << " not found!";
+        EXPECT_EQ(originalCount, resultCount);
+
+        frequency.insert({test[i], originalCount});
+    }
+
+    const int m = 300;
+
+    for (int i = 0; i < m; ++i) {
+        auto idx = distr(gen) % midlar.size();
+        int value = midlar[idx];
+        midlar.remove(idx);
+
+        int count = 0;
+        for (int j = 0; j < midlar.size(); ++j) {
+            if (midlar[j] == value) {
+                ++count;
+            }
         }
+
+        EXPECT_EQ(count, frequency[value] - 1);
+        --frequency[value];
     }
 }
