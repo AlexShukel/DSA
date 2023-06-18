@@ -6,6 +6,7 @@
 #include <cstdint>
 #include <algorithm>
 #include <stdexcept>
+#include <iostream>
 
 #define REBALANCE_THRESHOLD 1000
 
@@ -81,11 +82,6 @@ void Midlar<T>::remove(size_t index) {
 template<class T>
 size_t Midlar<T>::size() const {
     return left.size() + right.size();
-}
-
-template<class T>
-size_t Midlar<T>::capacity() const {
-    return left.capacity() + right.capacity();
 }
 
 template<class T>

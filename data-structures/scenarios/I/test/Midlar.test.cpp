@@ -6,6 +6,7 @@
 #include "Midlar.h"
 #include "utils.h"
 #include <chrono>
+#include <random>
 
 TEST(midlar, basic) {
     Midlar<int> arr;
@@ -66,13 +67,32 @@ TEST(midlar, benchmark_comparison) {
     }
 }
 
+int findValueCount(Midlar<int> &midlar, int value) {
+    int count = 0;
+    for (int i = 0; i < midlar.size(); ++i) {
+        if (value == midlar[i]) {
+            ++count;
+        }
+    }
+    return count;
+}
+
 TEST(midlar, stress_test) {
     Midlar<int> midlar;
 
-    auto test = generateRandomArray(1000);
+    const int n = 10000;
+    auto test = generateUniformDistributionArray(n);
 
+    std::random_device rd; // obtain a random number from hardware
+    std::mt19937 gen(rd()); // seed the generator
+    std::uniform_int_distribution<> distr(0, n - 1); // define the range
+
+    int sizeCounter = 0;
     for (auto x: test) {
-        midlar.insert(midlar.size() / 2, x);
+        auto size = midlar.size();
+        midlar.insert(size == 0 ? 0 : distr(gen) % midlar.size(), x);
+        ++sizeCounter;
+        EXPECT_EQ(midlar.size(), sizeCounter);
     }
 
     for (auto x: test) {
@@ -88,5 +108,18 @@ TEST(midlar, stress_test) {
         if (!found) {
             ASSERT_TRUE(false) << "The element " << x << " not found!";
         }
+    }
+
+    for (int i = 0; i < n; ++i) {
+        size_t size = midlar.size();
+        size_t index = distr(gen) % size;
+
+        auto value = midlar[index];
+
+        int before = findValueCount(midlar, value);
+        midlar.remove(index);
+        int after = findValueCount(midlar, value);
+
+        EXPECT_EQ(before - after, 1);
     }
 }

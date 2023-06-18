@@ -92,11 +92,6 @@ size_t DynamicArray<T>::size() const {
 }
 
 template<class T>
-size_t DynamicArray<T>::capacity() const {
-    return _capacity;
-}
-
-template<class T>
 void DynamicArray<T>::clear() {
     free(arr);
     _size = 0;
