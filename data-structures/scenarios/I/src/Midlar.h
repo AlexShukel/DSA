@@ -34,6 +34,8 @@ public:
 
     size_t size() const;
 
+    size_t maxSize() const;
+
     void clear();
 };
 

@@ -92,6 +92,11 @@ size_t DynamicArray<T>::size() const {
 }
 
 template<class T>
+size_t DynamicArray<T>::maxSize() const {
+    return std::numeric_limits<size_t>::max();
+}
+
+template<class T>
 void DynamicArray<T>::clear() {
     free(arr);
     _size = 0;
