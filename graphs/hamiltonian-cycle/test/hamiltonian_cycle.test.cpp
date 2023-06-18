@@ -6,6 +6,7 @@
 #include "Graph.h"
 #include "hamiltonian_cycle.h"
 #include "utils.h"
+#include "graph_utils.h"
 #include <algorithm>
 
 class SortedNeighborsGraph : public Graph<int> {
@@ -134,16 +135,6 @@ TEST(np_complete, hamiltonian_cycle_not_connected_graph) {
     delete[] matrix;
 }
 
-void generateFullyConnectedGraph(int **matrix, int n) {
-    for (int i = 0; i < n; ++i) {
-        for (int j = 0; j < n; ++j) {
-            if (i != j) {
-                matrix[i][j] = 1;
-            }
-        }
-    }
-}
-
 TEST(np_complete, hamiltonian_cycle_fully_connected_graph) {
     std::vector<int> sizes = {10, 50, 100, 500};
 
@@ -192,5 +183,3 @@ TEST(np_complete, hamiltonian_cycle_cyclic_graph_with_one_extra_vertex) {
     }
     delete[] matrix;
 }
-
-

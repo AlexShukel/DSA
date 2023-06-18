@@ -31,7 +31,10 @@ struct Node {
 };
 
 int main() {
-    vector<int> v(10);
-    cout << v.size();
+    vector<int> v = {1, 2, 3, 4};
+    auto it = std::find(v.begin(), v.begin() + 1, 2);
+    if (it == v.end()) {
+        std::cout << "hello";
+    }
     return 0;
 }
