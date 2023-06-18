@@ -6,7 +6,7 @@
 #include <algorithm>
 #include <cassert>
 
-void getNextVertex(int **graph, int size, std::vector<int> &path, size_t position) {
+void getNextVertex(int **graph, int size, std::vector<int> &path, int position) {
     while (true) {
         path[position] = (path[position] + 1) % size;
 
@@ -28,7 +28,7 @@ void getNextVertex(int **graph, int size, std::vector<int> &path, size_t positio
 
 void
 hamiltonian_recursion(std::vector<std::vector<int>> &cycles, int **graph, int size, std::vector<int> &path,
-                      size_t position) {
+                      int position) {
     if (position == size) {
         return;
     }
@@ -51,7 +51,7 @@ hamiltonian_recursion(std::vector<std::vector<int>> &cycles, int **graph, int si
 bool cmp(const std::vector<int> &a, const std::vector<int> &b) {
     assert(a.size() == b.size());
 
-    for (int i = 0; i < a.size(); ++i) {
+    for (size_t i = 0; i < a.size(); ++i) {
         if (a[i] < b[i]) {
             return false;
         } else if (a[i] > b[i]) {
