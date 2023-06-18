@@ -28,7 +28,6 @@ Midlar<T>::Midlar(size_t size, T fillValue) {
 
     right.resize(size / 2);
     std::fill(right.begin(), right.end(), fillValue);
-    right.reverse();
 }
 
 template<class T>

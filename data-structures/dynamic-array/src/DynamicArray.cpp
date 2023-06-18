@@ -6,6 +6,7 @@
 #include <cstdlib>
 #include <algorithm>
 #include <stdexcept>
+#include <limits>
 
 template<class T>
 DynamicArray<T>::DynamicArray(): arr(nullptr), _size(0), _capacity(0) {}
@@ -35,12 +36,11 @@ T &DynamicArray<T>::operator[](size_t index) {
 
 template<class T>
 void DynamicArray<T>::insert(size_t index, T value) {
-    ++_size;
-    if (index >= _size) {
-        --_size;
+    if (index > _size) {
         throw std::out_of_range("ERROR: index out of range");
     }
 
+    ++_size;
     if (_size > _capacity) {
         _capacity = std::max((size_t) 2, _capacity * 2);
         arr = (T *) realloc(arr, _capacity * sizeof(T));
@@ -66,13 +66,6 @@ void DynamicArray<T>::remove(size_t index) {
     if (_size <= _capacity / 2) {
         _capacity /= 2;
         arr = (T *) realloc(arr, _capacity * sizeof(T));
-    }
-}
-
-template<class T>
-void DynamicArray<T>::reverse() {
-    for (size_t i = 0; i < _size / 2; ++i) {
-        std::swap(arr[i], arr[_size - 1 - i]);
     }
 }
 

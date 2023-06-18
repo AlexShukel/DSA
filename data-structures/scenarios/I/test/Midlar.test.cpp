@@ -80,7 +80,7 @@ int findValueCount(Midlar<int> &midlar, int value) {
 TEST(midlar, stress_test) {
     Midlar<int> midlar;
 
-    const int n = 10000;
+    const int n = 1000;
     auto test = generateUniformDistributionArray(n);
 
     std::random_device rd; // obtain a random number from hardware

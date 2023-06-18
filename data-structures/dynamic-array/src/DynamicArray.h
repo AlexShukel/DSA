@@ -29,8 +29,6 @@ public:
 
     void remove(size_t index);
 
-    void reverse();
-
     T *begin();
 
     T *end();

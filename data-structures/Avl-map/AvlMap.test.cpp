@@ -78,5 +78,16 @@ TEST(trees, randomized_data) {
             EXPECT_EQ(map.has(x), true);
             EXPECT_EQ(*map.get(x), x);
         }
+
+        std::vector<int> correctVector(set.begin(), set.end());
+        std::vector<int> myVector;
+        auto it = map.getIterator(INORDER);
+
+        while (it.hasNext()) {
+            myVector.push_back(it.getNode()->value);
+            ++it;
+        }
+
+        expectVectorsEquality(myVector, correctVector);
     }
 }

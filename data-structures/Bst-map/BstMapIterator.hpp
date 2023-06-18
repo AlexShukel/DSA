@@ -6,8 +6,9 @@
 #define DSA_BSTITERATOR_HPP
 
 #include "Node.hpp"
-#include <stack>
+#include <queue>
 #include <stdexcept>
+#include <algorithm>
 
 enum TraverseOrder {
     INORDER,
@@ -18,7 +19,14 @@ enum TraverseOrder {
 template<class K, class T>
 class BstMapIterator {
 private:
-    std::stack<Node<K, T> *> values;
+    std::queue<Node<K, T> *> values;
+
+    void constructInorder(Node<K, T> *current);
+
+    void constructPreorder(Node<K, T> *current);
+
+    void constructPostorder(Node<K, T> *current);
+
 public:
     BstMapIterator(Node<K, T> *root, TraverseOrder order);
 
@@ -30,6 +38,60 @@ public:
 };
 
 template<class K, class T>
+void BstMapIterator<K, T>::constructPostorder(Node<K, T> *current) {
+    if (current->isLeaf()) {
+        values.push(current);
+        return;
+    }
+
+    if (current->left) {
+        constructInorder(current->left);
+    }
+
+    if (current->right) {
+        constructInorder(current->right);
+    }
+
+    values.push(current);
+}
+
+template<class K, class T>
+void BstMapIterator<K, T>::constructPreorder(Node<K, T> *current) {
+    if (current->isLeaf()) {
+        values.push(current);
+        return;
+    }
+
+    values.push(current);
+
+    if (current->left) {
+        constructInorder(current->left);
+    }
+
+    if (current->right) {
+        constructInorder(current->right);
+    }
+}
+
+template<class K, class T>
+void BstMapIterator<K, T>::constructInorder(Node<K, T> *current) {
+    if (current->isLeaf()) {
+        values.push(current);
+        return;
+    }
+
+    if (current->left) {
+        constructInorder(current->left);
+    }
+
+    values.push(current);
+
+    if (current->right) {
+        constructInorder(current->right);
+    }
+}
+
+template<class K, class T>
 BstMapIterator<K, T>::BstMapIterator(Node<K, T> *root, TraverseOrder order) {
     if (!root) {
         return;
@@ -38,100 +100,21 @@ BstMapIterator<K, T>::BstMapIterator(Node<K, T> *root, TraverseOrder order) {
     switch (order) {
         // LVD (left, vertex, right)
         case INORDER: {
-            std::stack<std::pair<int, Node<K, T> *>> tempStack;
-            tempStack.push({0, root});
-
-            while (!tempStack.empty()) {
-                auto &t = tempStack.top();
-
-                int &count = t.first;
-                Node<K, T> *node = t.second;
-
-                if (node->isLeaf()) {
-                    values.push(node);
-                    tempStack.pop();
-                }
-
-                if (count == 2) {
-                    tempStack.pop();
-                }
-
-                if (count == 0 && node->right) {
-                    tempStack.push({0, node->right});
-                }
-
-                if (count == 1 && node->left) {
-                    values.push(node);
-                    tempStack.push({0, node->left});
-                }
-
-                ++count;
-            }
+            constructInorder(root);
 
             break;
         }
 
             // VLR (vertex, left, right)
         case PREORDER: {
-            std::stack<std::pair<int, Node<K, T> *>> tempStack;
-            tempStack.push({0, root});
-
-            while (!tempStack.empty()) {
-                auto &t = tempStack.top();
-
-                int &count = t.first;
-                Node<K, T> *node = t.second;
-
-                if (node->isLeaf() || count == 2) {
-                    values.push(node);
-                    tempStack.pop();
-                }
-
-                if (count == 0 && node->right) {
-                    tempStack.push({0, node->right});
-                }
-
-                if (count == 1 && node->left) {
-                    tempStack.push({0, node->left});
-                }
-
-                ++count;
-            }
+            constructPreorder(root);
 
             break;
         }
 
             // LRV (left, right, vertex)
         case POSTORDER: {
-            std::stack<std::pair<int, Node<K, T> *>> tempStack;
-            tempStack.push({0, root});
-
-            while (!tempStack.empty()) {
-                auto &t = tempStack.top();
-
-                int &count = t.first;
-                Node<K, T> *node = t.second;
-
-                if (node->isLeaf()) {
-                    values.push(node);
-                    tempStack.pop();
-                }
-
-                if (count == 2) {
-                    tempStack.pop();
-                }
-
-                if (count == 0 && node->right) {
-                    values.push(node);
-                    tempStack.push({0, node->right});
-                }
-
-                if (count == 1 && node->left) {
-                    tempStack.push({0, node->left});
-                }
-
-                ++count;
-            }
+            constructPostorder(root);
 
             break;
         }
@@ -150,7 +133,7 @@ BstMapIterator<K, T> &BstMapIterator<K, T>::operator++() {
 
 template<class K, class T>
 Node<K, T> *BstMapIterator<K, T>::getNode() const {
-    return values.top();
+    return values.front();
 }
 
 template<class K, class T>
