@@ -8,7 +8,16 @@
 #include "gtest/gtest.h"
 #include <vector>
 
-void expectVectorToBeSorted(const std::vector<int> &arr);
+template<class T>
+void expectVectorToBeSorted(T &arr) {
+    if (arr.size() <= 1) {
+        return;
+    }
+
+    for (size_t i = 0; i < arr.size() - 1; ++i) {
+        EXPECT_GE(arr[i + 1], arr[i]);
+    }
+}
 
 bool compare(const int &a, const int &b);
 

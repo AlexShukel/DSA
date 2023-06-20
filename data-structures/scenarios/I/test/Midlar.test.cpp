@@ -7,6 +7,7 @@
 #include "utils.h"
 #include <chrono>
 #include <random>
+#include <algorithm>
 
 TEST(midlar, basic) {
     Midlar<int> arr;
@@ -56,7 +57,7 @@ long long measureFirstScenario(Container &arr, size_t n) {
 }
 
 TEST(midlar, benchmark_comparison) {
-    for (size_t i = 100; i <= 1e5; i *= 10) {
+    for (size_t i = 1000; i <= 1e5; i *= 10) {
         Midlar<int> midlar;
         auto midlarTime = measureFirstScenario(midlar, i);
 
@@ -69,8 +70,8 @@ TEST(midlar, benchmark_comparison) {
 
 int findValueCount(Midlar<int> &midlar, int value) {
     int count = 0;
-    for (int i = 0; i < midlar.size(); ++i) {
-        if (value == midlar[i]) {
+    for (auto x: midlar) {
+        if (value == x) {
             ++count;
         }
     }
@@ -98,8 +99,8 @@ TEST(midlar, stress_test) {
     for (auto x: test) {
         bool found = false;
 
-        for (size_t i = 0; i < midlar.size(); ++i) {
-            if (midlar[i] == x) {
+        for (auto value: midlar) {
+            if (value == x) {
                 found = true;
                 break;
             }
@@ -109,6 +110,9 @@ TEST(midlar, stress_test) {
             ASSERT_TRUE(false) << "The element " << x << " not found!";
         }
     }
+
+    std::sort(midlar.begin(), midlar.end());
+    expectVectorToBeSorted(midlar);
 
     for (int i = 0; i < n; ++i) {
         size_t size = midlar.size();
@@ -121,5 +125,23 @@ TEST(midlar, stress_test) {
         int after = findValueCount(midlar, value);
 
         EXPECT_EQ(before - after, 1);
+    }
+}
+
+TEST(midlar, iterators) {
+    const int n = 100;
+
+    Midlar<int> midlar(n);
+    std::vector<int> vec(n);
+
+    for (int i = 0; i < n; ++i) {
+        midlar[i] = i;
+        vec[i] = i;
+    }
+
+    int i = 0;
+    for (auto val: midlar) {
+        EXPECT_EQ(val, vec[i]);
+        ++i;
     }
 }

@@ -1,6 +1,7 @@
 #include <iostream>
 #include <vector>
 #include <set>
+#include <cstdlib>
 
 using namespace std;
 
@@ -31,10 +32,18 @@ struct Node {
 };
 
 int main() {
-    vector<int> v = {1, 2, 3, 4};
-    auto it = std::find(v.begin(), v.begin() + 1, 2);
-    if (it == v.end()) {
-        std::cout << "hello";
+    int n = 10;
+    int *arr = (int *) malloc(n * sizeof(int));
+
+    for (int i = 0; i < n; ++i) {
+        arr[i] = i;
     }
+
+    arr = (int *) realloc(arr, 6 * sizeof(int));
+
+    for (int i = 0; i < n; ++i) {
+        std::cout << arr[i] << " ";
+    }
+
     return 0;
 }

@@ -127,5 +127,121 @@ void Midlar<T>::clear() {
     right.clear();
 }
 
+template<class T>
+typename Midlar<T>::Iterator Midlar<T>::begin() {
+    return Iterator(this, 0);
+}
+
+template<class T>
+typename Midlar<T>::Iterator Midlar<T>::end() {
+    return Iterator(this, size());
+}
+
+template<class T>
+Midlar<T>::Iterator::Iterator(Midlar<T> *arr, size_t index) : arr(arr), index(index) {}
+
+template<class T>
+T &Midlar<T>::Iterator::operator*() const {
+    return (*arr)[index];
+}
+
+template<class T>
+T *Midlar<T>::Iterator::operator->() {
+    return &((*arr)[index]);
+}
+
+template<class T>
+typename Midlar<T>::Iterator &Midlar<T>::Iterator::operator++() {
+    ++index;
+    return *this;
+}
+
+template<class T>
+typename Midlar<T>::Iterator Midlar<T>::Iterator::operator++(int) {
+    Iterator temp = *this;
+    ++*this;
+    return temp;
+}
+
+template<class T>
+typename Midlar<T>::Iterator &Midlar<T>::Iterator::operator--() {
+    --index;
+    return *this;
+}
+
+template<class T>
+typename Midlar<T>::Iterator Midlar<T>::Iterator::operator--(int) {
+    Iterator temp = *this;
+    --*this;
+    return temp;
+}
+
+template<class T>
+bool Midlar<T>::Iterator::operator!=(const Midlar::Iterator &other) const {
+    return index != other.index;
+}
+
+template<class T>
+bool Midlar<T>::Iterator::operator==(const Midlar::Iterator &other) const {
+    return index == other.index;
+}
+
+template<class T>
+bool Midlar<T>::Iterator::operator<(const Midlar::Iterator &other) const {
+    return index < other.index;
+}
+
+template<class T>
+bool Midlar<T>::Iterator::operator>(const Midlar::Iterator &other) const {
+    return index > other.index;
+}
+
+template<class T>
+bool Midlar<T>::Iterator::operator<=(const Midlar::Iterator &other) const {
+    return index <= other.index;
+}
+
+template<class T>
+bool Midlar<T>::Iterator::operator>=(const Midlar::Iterator &other) const {
+    return index >= other.index;
+}
+
+template<class T>
+typename Midlar<T>::Iterator Midlar<T>::Iterator::operator+(size_t n) const {
+    Midlar<T>::Iterator copy = *this;
+    copy += n;
+    return copy;
+}
+
+template<class T>
+typename Midlar<T>::Iterator &Midlar<T>::Iterator::operator+=(size_t n) {
+    index += n;
+    return *this;
+}
+
+template<class T>
+typename Midlar<T>::Iterator Midlar<T>::Iterator::operator-(size_t n) const {
+    Midlar<T>::Iterator copy = *this;
+    copy -= n;
+    return copy;
+}
+
+template<class T>
+typename Midlar<T>::Iterator &Midlar<T>::Iterator::operator-=(size_t n) {
+    index -= n;
+    return *this;
+}
+
+template<class T>
+typename Midlar<T>::Iterator::difference_type Midlar<T>::Iterator::operator-(const Midlar::Iterator &other) const {
+    return static_cast<typename Midlar<T>::Iterator::difference_type>(index) -
+           static_cast<typename Midlar<T>::Iterator::difference_type>(other.index);
+}
+
+template<class T>
+T &Midlar<T>::Iterator::operator[](size_t n) const {
+    return (*arr)[n];
+}
+
 template
 class Midlar<int>;
