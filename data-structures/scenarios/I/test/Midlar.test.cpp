@@ -112,7 +112,7 @@ TEST(midlar, stress_test) {
     }
 
     std::sort(midlar.begin(), midlar.end());
-    expectVectorToBeSorted(midlar);
+    expectSortedContainer(midlar);
 
     for (int i = 0; i < n; ++i) {
         size_t size = midlar.size();

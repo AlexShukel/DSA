@@ -11,6 +11,6 @@ TEST(sorts, intro_sort) {
 
     for (auto arr: tests) {
         introSort(arr.begin(), arr.end(), compare);
-        expectVectorToBeSorted(arr);
+        expectSortedContainer(arr);
     }
 }

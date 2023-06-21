@@ -11,6 +11,6 @@ TEST(sorts, bubble) {
 
     for (auto arr: tests) {
         bubbleSort(arr.begin(), arr.end(), compare);
-        expectVectorToBeSorted(arr);
+        expectSortedContainer(arr);
     }
 }

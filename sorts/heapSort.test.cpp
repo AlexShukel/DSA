@@ -11,6 +11,6 @@ TEST(sorts, heap_sort) {
 
     for (auto arr: tests) {
         heapSort(arr.begin(), arr.end(), compare);
-        expectVectorToBeSorted(arr);
+        expectSortedContainer(arr);
     }
 }

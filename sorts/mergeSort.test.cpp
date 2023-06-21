@@ -11,6 +11,6 @@ TEST(sorts, merge_sort) {
 
     for (auto arr: tests) {
         mergeSort(arr.begin(), arr.end(), compare);
-        expectVectorToBeSorted(arr);
+        expectSortedContainer(arr);
     }
 }

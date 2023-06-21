@@ -9,7 +9,7 @@
 #include <vector>
 
 template<class T>
-void expectVectorToBeSorted(T &arr) {
+void expectSortedContainer(T &arr) {
     if (arr.size() <= 1) {
         return;
     }

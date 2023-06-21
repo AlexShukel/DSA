@@ -11,6 +11,6 @@ TEST(sorts, cocktail_shaker) {
 
     for (auto arr: tests) {
         cocktailShakerSort(arr.begin(), arr.end(), compare);
-        expectVectorToBeSorted(arr);
+        expectSortedContainer(arr);
     }
 }
