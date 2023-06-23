@@ -2,6 +2,7 @@
 // Created by alexs on 2023-06-07.
 //
 
+#include <algorithm>
 #include "gtest/gtest.h"
 #include "DynamicArray.h"
 
@@ -52,4 +53,24 @@ TEST(dynamic_array, remove) {
     for (int &it: arr) {
         EXPECT_EQ(it, 1);
     }
+}
+
+TEST(dynamic_array, copy_constructor) {
+    DynamicArray<int> arr;
+
+    arr.pushBack(2);
+    arr.pushBack(1);
+    arr.pushBack(3);
+
+    DynamicArray<int> copy = arr;
+
+    std::sort(copy.begin(), copy.end());
+
+    EXPECT_EQ(arr[0], 2);
+    EXPECT_EQ(arr[1], 1);
+    EXPECT_EQ(arr[2], 3);
+
+    EXPECT_EQ(copy[0], 1);
+    EXPECT_EQ(copy[1], 2);
+    EXPECT_EQ(copy[2], 3);
 }

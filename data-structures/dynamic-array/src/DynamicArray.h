@@ -21,6 +21,8 @@ public:
 
     DynamicArray(size_t size, T fillValue);
 
+    DynamicArray(const DynamicArray &other);
+
     ~DynamicArray();
 
     T &operator[](size_t index);

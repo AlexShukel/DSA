@@ -21,6 +21,12 @@ DynamicArray<T>::DynamicArray(size_t size, T fillValue): arr((T *) malloc(size *
 }
 
 template<class T>
+DynamicArray<T>::DynamicArray(const DynamicArray<T> &other) : arr(nullptr), _size(other._size), _capacity(other._capacity) {
+    arr = (T*) malloc(_capacity * sizeof(T));
+    std::copy(other.arr, other.arr + _size, arr);
+}
+
+template<class T>
 DynamicArray<T>::~DynamicArray() {
     free(arr);
 }
