@@ -41,6 +41,15 @@ T &DynamicArray<T>::operator[](size_t index) {
 }
 
 template<class T>
+const T &DynamicArray<T>::operator[](size_t index) const {
+    if (index >= _size) {
+        throw std::out_of_range("ERROR: index out of range");
+    }
+
+    return arr[index];
+}
+
+template<class T>
 void DynamicArray<T>::insert(size_t index, T value) {
     if (index > _size) {
         throw std::out_of_range("ERROR: index out of range");

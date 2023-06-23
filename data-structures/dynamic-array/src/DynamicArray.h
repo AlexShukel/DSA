@@ -27,6 +27,8 @@ public:
 
     T &operator[](size_t index);
 
+    const T &operator[](size_t index) const;
+
     void insert(size_t index, T value);
 
     void remove(size_t index);

@@ -145,3 +145,15 @@ TEST(midlar, iterators) {
         ++i;
     }
 }
+
+TEST(midlar, insert_last) {
+    const int n = 10;
+    auto data = generateRandomArray(n);
+
+    Midlar<int> midlar;
+    for (auto value: data) {
+        midlar.insert(midlar.size(), value);
+    }
+
+    expectEqualContainers(midlar, data);
+}

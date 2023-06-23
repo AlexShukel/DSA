@@ -19,6 +19,14 @@ void expectSortedContainer(T &arr) {
     }
 }
 
+template<class T, class C>
+void expectEqualContainers(const T &a, const C &b) {
+    EXPECT_EQ(a.size(), b.size());
+    for (size_t i = 0; i < a.size(); ++i) {
+        EXPECT_EQ(a[i], b[i]);
+    }
+}
+
 bool compare(const int &a, const int &b);
 
 std::vector<std::vector<int>> getTestsData();

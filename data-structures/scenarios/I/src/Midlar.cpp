@@ -40,7 +40,20 @@ T &Midlar<T>::operator[](size_t index) {
         return left[index];
     }
 
-    return right[getRightPartIndex(index)];
+    return right[getRightPartIndex(index) - 1];
+}
+
+template<class T>
+const T &Midlar<T>::operator[](size_t index) const {
+    if (index >= size()) {
+        throw std::out_of_range("ERROR: index out of range");
+    }
+
+    if (index < left.size()) {
+        return left[index];
+    }
+
+    return right[getRightPartIndex(index) - 1];
 }
 
 template<class T>
@@ -69,7 +82,7 @@ void Midlar<T>::remove(size_t index) {
     if (index < left.size()) {
         left.remove(index);
     } else {
-        right.remove(getRightPartIndex(index));
+        right.remove(getRightPartIndex(index) - 1);
     }
 
     if (shouldRebalance()) {
@@ -89,7 +102,7 @@ size_t Midlar<T>::maxSize() const {
 
 template<class T>
 size_t Midlar<T>::getRightPartIndex(size_t index) const {
-    return right.size() - 1 - (index - left.size());
+    return right.size() - (index - left.size());
 }
 
 template<class T>
